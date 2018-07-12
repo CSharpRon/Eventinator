@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import {register} from '../../Api/Authentication/authentication';
+import AuthenticationApi from '../../Api/Authentication/authenticationApi';
 import $ from 'jquery';
 
 class Register extends Component {
@@ -10,25 +11,13 @@ class Register extends Component {
         var username = 'ron';
         var password = 'jon';
 
-        console.log(JSON.stringify({'username': username, 'password': password}));
+        AuthenticationApi.register(username, password)
+            .then((result) => {
 
-        return fetch('http://0ee245ae.ngrok.io/register', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            dataType: "json",
-            body: JSON.stringify({username, password}),
-        })
-        .then((response) => response.json())
-        .then((res) => {
-            console.log(res)
-            if(res.res) {
-                window.alert('success!')
-            }
-        })
-        .catch((r) => window.alert(r.res))
+            })
+            .catch((err) => {
+                alert('Error registering user');
+            });
     }
 
     render() {
