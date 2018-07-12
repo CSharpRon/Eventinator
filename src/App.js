@@ -3,7 +3,8 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Header from './Components/common/Header';
 import HomePage from './Components/HomePage';
 import Events from './Components/events/EventPage';
-import Register from './Components/authentication/LoginPage';
+import Login from './Components/authentication/LoginPage';
+import Register from './Components/authentication/RegisterPage';
 
 class App extends React.Component {
   render() {
@@ -14,6 +15,7 @@ class App extends React.Component {
                   <Route path="/" component = {Header}/>
                   <Route path="/" exact component={HomePage} />
                   <Route path="/events" exact component={Events} />
+                  <Route path="/login" exact component={Login} />
                   <Route path="/register" exact component={Register} />
               </div>
           </BrowserRouter>
