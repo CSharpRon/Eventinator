@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {register} from '../../Api/Authentication/authentication';
 import AuthenticationApi from '../../Api/Authentication/authenticationApi';
-import $ from 'jquery';
+import axios from 'axios';
 
 class Register extends Component {
 
@@ -11,13 +10,18 @@ class Register extends Component {
         var username = 'ron';
         var password = 'jon';
 
-        AuthenticationApi.register(username, password)
-            .then((result) => {
-
-            })
-            .catch((err) => {
-                alert('Error registering user');
-            });
+        axios.post(URL, {
+            username: this.username,
+            password: this.password
+        })
+        // AuthenticationApi.register(username, password)
+        //     .then((result) => {
+        //         alert('success! ' + result);
+        //     })
+        //     .catch((err) => {
+        //         console.log(JSON.stringify(err));
+        //         alert('Error registering user: ');
+        //     });
     }
 
     render() {
@@ -39,7 +43,7 @@ class Register extends Component {
                             <div className="panel-body">
                                 <div className="row">
                                     <div className="col-lg-12">
-                                        <form id="register-form" method="post" role="form" style={{"display": "block"}}>
+                                        <form id="register-form" role="form" style={{"display": "block"}}>
                                             <div className="form-group">
                                                 <input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
                                             </div>

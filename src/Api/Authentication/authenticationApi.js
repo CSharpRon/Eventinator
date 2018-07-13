@@ -2,13 +2,13 @@ import Service from '../../Service/service';
 
 class AuthenticationApi {
     
-    url = 'localhost';
+    url = 'http://2ba3514d.ngrok.io/register';
 
     register(username, password) {
 
         return new Promise((resolve, reject) => {
             Service.doPost(this.url, {username, password})
-                .then((result) => resolve(result.data))
+                .then((result) => resolve(result))
                 .catch((err) => reject(err));
         });
     }
