@@ -21,7 +21,7 @@ class User(db.Model):
 
     inrso = db.relationship('User_in_rso', backref='User', lazy=True)
     events = db.relationship('Events', backref='User', lazy=True)
-    attendee= db.relationship('Even_attendees', backref='User', lazy=True)
+    attendee= db.relationship('Event_attendees', backref='User', lazy=True)
 
     def __init__ (self, username, password, role=0):
         self.username = username
@@ -95,7 +95,7 @@ def register():
 
     if request.method == 'POST':
 
-        check_username = User.query.filter_by(Username=username).first()
+        check_username = User.query.filter_by(username=username).first()
 
         if check_username is None:
 
@@ -104,7 +104,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
 
-            session['logged_in_user'] = new_user.UserID
+            session['logged_in_user'] = new_user.userid
             flash('Sucessfull!')
 
             res = {'res' : 'Registration Successful!'}
