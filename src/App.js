@@ -5,7 +5,7 @@ import HomePage from './Components/HomePage';
 import Events from './Components/events/EventPage';
 import Login from './Components/authentication/LoginPage';
 import Register from './Components/authentication/RegisterPage';
-import  from './Components/authentication/RegisterPage';
+import Maps from './Components/googleMaps/GoogleMapsPage';
 
 class App extends React.Component {
   render() {
