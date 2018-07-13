@@ -8,4 +8,11 @@ class EventPage extends Component {
     }
 }
 
+function Button() {
+    return (
+      React.createElement("button", null, "Go")
+    );
+  }
+
+
 export default EventPage;
