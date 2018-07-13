@@ -4,9 +4,17 @@ import { Link } from 'react-router-dom';
 
 
 class Header extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: null
+        };
+    }
+
     render() {
         return (
-            <nav className="navbar navbar-default">
+            <nav className="navbar navbar-inverse">
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <Link to="/" className="navbar-brand" style={{ paddingTop: 0 }}>
@@ -17,9 +25,16 @@ class Header extends Component {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/events">Events</Link></li>
                     </ul>
-                    <ul className="nav navbar-nav navbar-right">
-                        <li><Link to="/register">Login/Sign Up</Link></li>
-                    </ul>
+                    {!this.state.username ? (
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><Link to="/login">Login</Link></li>
+                            <li><Link to="/register">Register</Link></li>
+                        </ul>
+                    ) : (
+                            <ul className="nav navbar-nav navbar-right">
+                                <li><Link to="/account">My Account</Link></li>
+                            </ul>
+                        )}
                 </div>
             </nav>
         );
