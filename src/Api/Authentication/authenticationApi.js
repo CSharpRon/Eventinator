@@ -2,7 +2,7 @@ import Service from '../../Service/service';
 
 class AuthenticationApi {
     
-    url = 'http://2ba3514d.ngrok.io/register';
+    url = 'http://127.0.0.1:5000/register';
 
     register(username, password) {
 
