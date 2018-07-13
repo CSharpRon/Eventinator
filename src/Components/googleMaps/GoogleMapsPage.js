@@ -1,33 +1,23 @@
 import React, { Component } from 'react';
-import { withGoogleMap, GoogleMap } from 'react-google-maps';
-class Map extends Component {
-   render() {
-   const GoogleMapExample = withGoogleMap(props => (
-      <GoogleMap
-        defaultCenter = { { lat: 40.756795, lng: -73.954298 } }
-        defaultZoom = { 13 }
-      >
-   onGoogleApiLoaded={({map, maps}) => this.renderMarkers(map, maps)}  
-   
-    
-      </GoogleMap>
-   
-));
+import { render } from 'react-dom';
+import Markers from './Markers'; 
+//import './style.css';
 
-   
-   return(
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: 'React'
+    };
+  }
+
+  render() {
+    return (
       <div>
-        <GoogleMapExample
-          containerElement={ <div style={{ height: `500px`, width: '500px' }} /> }
-          mapElement={ <div style={{ height: `1000px` }} /> }
-          
-        />
+        <Markers  />
       </div>
-   );
-   
-   }
-   
-};
+    );
+  }
+}
 
-
-export default Map;
+render(<App />, document.getElementById('root'));
