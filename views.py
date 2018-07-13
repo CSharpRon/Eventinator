@@ -69,7 +69,7 @@ class Events(db.Model):
     def __init__(self, name, description, rating):
         self.name=name
         self.description=description
-        self.rating=rarting
+        self.rating=rating
 
 class Event_attendees(db.Model):
 
