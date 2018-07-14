@@ -11,6 +11,29 @@ class EventPage extends Component {
     }
     render() {
 
+        const data = [
+            {
+                "name": "presentation",
+                "eventCategory": "school",
+                "descrition": "Jank presentation",
+                "time": "06:00 PM",
+                "date": "07/16/018",
+                "location": "lat: 1 lng: 1",
+                "phone": "(352) 555-5555",
+                "email": "someplace@gmail.com"
+            },
+            {
+                "name": "more Jank",
+                "eventCategory": "school",
+                "descrition": "Jank presentation",
+                "time": "06:00 PM",
+                "date": "07/16/018",
+                "location": "lat: 1 lng: 1",
+                "phone": "(352) 555-5555",
+                "email": "someplace@gmail.com"
+            },
+          ];
+
         return (
             
             <div class="table-wrapper">
@@ -31,20 +54,24 @@ class EventPage extends Component {
             </thead>
             <tbody>
                 <input type="hidden" value="@item.Id" id="groupId"/>      
-                <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}"> 
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
-                    <td> 
-                    <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Delete Contact</button>
-                    </td>
-                </tr>
+                {data.map(obj =>{
+                    return (
+                    <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}"> 
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.name}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.eventCategory}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.descrition}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.time}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.date}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.location}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.phone}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.email}</td>
+                        <td> 
+                        <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Delete Contact</button>
+                        </td>
+                    </tr>
 
+                    );
+                })}
             </tbody>
             </table>
       </div>
