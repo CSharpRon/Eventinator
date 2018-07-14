@@ -5,10 +5,22 @@ import Markers from '../googleMaps/Markers';
 
 
 class EventPage extends Component {
+    
     constructor(props) {
         super(props);
-        this.state = { };
+        this.state = {
+            lat: 0,
+            lng: 0
+         };
+
+        this.getLocation = this.getLocation.bind(this);
     }
+
+    //we can use this function to ping to a location of an event
+    getLocation (obj){
+        console.log(obj);
+    }
+
     render() {
 
         const data = [
@@ -18,7 +30,7 @@ class EventPage extends Component {
                 "descrition": "Jank presentation",
                 "time": "06:00 PM",
                 "date": "07/16/018",
-                "location": "lat: 1 lng: 1",
+                "location": "lat: 28.600720 lng: -81.197718",
                 "phone": "(352) 555-5555",
                 "email": "someplace@gmail.com"
             },
@@ -28,7 +40,7 @@ class EventPage extends Component {
                 "descrition": "Jank presentation",
                 "time": "06:00 PM",
                 "date": "07/16/018",
-                "location": "lat: 1 lng: 1",
+                "location": "lat: 28.599900 lng: -81.200325",
                 "phone": "(352) 555-5555",
                 "email": "someplace@gmail.com"
             },
@@ -66,20 +78,27 @@ class EventPage extends Component {
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.phone}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.email}</td>
                         <td> 
-                        <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Ping to Location</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.location)}  data-button="{{contact.id}}">Ping to Location</button>
                         </td>
                     </tr>
 
                     );
+                    
                 })}
             </tbody>
             </table>
       </div>
-        );
-    }
+
+
+);
+}
 }
 
 function Button() {
+    getLocation: (location) => {
+        console.log(location);
+    }
+
     return (
       React.createElement("button", null, "Go")
     );

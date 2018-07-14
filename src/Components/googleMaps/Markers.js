@@ -33,15 +33,24 @@ const MyMapComponent = compose(
                 onClick: (info) => {
                     let info1 = info
                     //console.log(info.la)
-                    //console.log(info.latLng)
+                    console.log(info.latLng)
                     //console.log(info)
                     this.setState({ position: info.latLng, isMarkerShown: true })
                     //const position = info.latLng;                    
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
 
+                pingToLocation: (lati, long) => {
+                    //console.log(info.la)
+                    console.log(lati + " " + long)
+                    //console.log(info)
+                    this.setState({ position: [ lati, long], isMarkerShown: true })
+                    //const position = info.latLng;                    
+                    //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
+                },
+
                 doubleclick: () =>{
-                    this.setState({zoom: 25 })
+                    this.setState({zoom: 25, defaultZoom: 25 })
                 },
 
                 
