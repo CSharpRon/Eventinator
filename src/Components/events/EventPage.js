@@ -1,32 +1,44 @@
 import React, {Component} from 'react';
 import Markers from '../googleMaps/Markers'; 
-import ReactScrollableList from 'react-scrollable-list'
+
 
 
 
 class EventPage extends Component {
     constructor(props) {
         super(props);
-        this.state = { items:[], index: 0 };
-        this._nodes = new Map();
-   }
+        this.state = { };
+    }
     render() {
-        const {data} = [1,2];
-
-        
 
         return (
             
-            <div>
-                <b>You made it to the event page!</b>
-                <Markers  />
-                <ReactScrollableList 
-                    listItems = {[1,2,34]} 
-                    heightOfItem={30}
-                    maxItemsToRender={3}
-                    style={{ color: '#333' }}
-                />
-            </div>
+            <div class="table-wrapper">
+            <table class="table table-dark table-striped table-hover rounded">
+            <thead class="rounded">
+                <tr>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <input type="hidden" value="@item.Id" id="groupId"/>      
+                <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}"> 
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td> 
+                    <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Delete Contact</button>
+                    </td>
+                </tr>
+
+            </tbody>
+            </table>
+      </div>
         );
     }
 }
