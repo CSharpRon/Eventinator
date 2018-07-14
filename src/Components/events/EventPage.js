@@ -66,7 +66,7 @@ class EventPage extends Component {
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.phone}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.email}</td>
                         <td> 
-                        <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Delete Contact</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-button" data-button="{{contact.id}}">Ping to Location</button>
                         </td>
                     </tr>
 
