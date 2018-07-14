@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Markers from '../googleMaps/Markers'; 
+import Markers from '../googleMaps/Markers';
 
 
 
@@ -19,6 +19,13 @@ class EventPage extends Component {
     //we can use this function to ping to a location of an event
     getLocation (obj){
         console.log(obj);
+        
+        var startOfLongitude = obj.indexOf("lng:")+5, endOfLongitude = obj.length;
+        var startOfLatitude = 5, endOfLatitude = startOfLongitude - 11;
+
+        //opens a new google map window to the location of the event.
+        window.open('http://maps.google.com/maps?q='+ obj.substr(startOfLatitude, endOfLatitude) +','+ obj.substr(startOfLongitude, endOfLongitude), '_blank');
+        //<Markers func = {this.child.pingToLocation()}/>
     }
 
     render() {
@@ -29,7 +36,7 @@ class EventPage extends Component {
                 "eventCategory": "school",
                 "descrition": "Jank presentation",
                 "time": "06:00 PM",
-                "date": "07/16/018",
+                "date": "07/16/2018",
                 "location": "lat: 28.600720 lng: -81.197718",
                 "phone": "(352) 555-5555",
                 "email": "someplace@gmail.com"
@@ -39,7 +46,7 @@ class EventPage extends Component {
                 "eventCategory": "school",
                 "descrition": "Jank presentation",
                 "time": "06:00 PM",
-                "date": "07/16/018",
+                "date": "07/16/2018",
                 "location": "lat: 28.599900 lng: -81.200325",
                 "phone": "(352) 555-5555",
                 "email": "someplace@gmail.com"
@@ -54,7 +61,7 @@ class EventPage extends Component {
             <thead class="rounded">
                 <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Event category</th>
+                <th scope="col">Event Category</th>
                 <th scope="col">Description</th>
                 <th scope="col">Time</th>
                 <th scope="col">Date</th>
@@ -95,9 +102,6 @@ class EventPage extends Component {
 }
 
 function Button() {
-    getLocation: (location) => {
-        console.log(location);
-    }
 
     return (
       React.createElement("button", null, "Go")

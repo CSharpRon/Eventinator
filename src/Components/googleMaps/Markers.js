@@ -40,11 +40,16 @@ const MyMapComponent = compose(
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
 
-                pingToLocation: (lati, long) => {
+                pingToLocation: () => {
                     //console.log(info.la)
-                    console.log(lati + " " + long)
-                    //console.log(info)
-                    this.setState({ position: [ lati, long], isMarkerShown: true })
+                    
+                    //console.log(lati + " " + long)
+                    
+                    console.log("hi")
+                    
+                    
+                    //this.setState({ position: [ lati, long], isMarkerShown: true })
+                    
                     //const position = info.latLng;                    
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
