@@ -14,6 +14,7 @@ class EventPage extends Component {
         return (
             
             <div class="table-wrapper">
+            <div><Markers/> </div>
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
                 <tr>
