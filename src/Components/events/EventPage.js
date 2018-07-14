@@ -18,8 +18,12 @@ class EventPage extends Component {
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
                 <tr>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
+                <th scope="col">Name</th>
+                <th scope="col">Event category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Time</th>
+                <th scope="col">Date</th>
+                <th scope="col">Location</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Email</th>
                 <th scope="col"></th>
@@ -28,6 +32,10 @@ class EventPage extends Component {
             <tbody>
                 <input type="hidden" value="@item.Id" id="groupId"/>      
                 <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}"> 
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
+                    <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
                     <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
                     <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
                     <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">ayy</td>
