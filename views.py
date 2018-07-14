@@ -86,12 +86,10 @@ class Event_attendees(db.Model):
 @app.route('/register',methods=['GET','POST'])
 def register():
 
-    data = request.get_json(force=True)
 
-    username= data.get('username')
-    password= data.get('password')
+    username= request.form['username']
+    password= request.form['password']
 
-    print(data)
 
     if request.method == 'POST':
 
@@ -116,6 +114,32 @@ def register():
             return (json.dumps(res),200)
 
     return ('Unknown Error, Blame Ronald', 204)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    
+    username= request.form['username']
+    password= request.form['password']
+        
+    if request.method == 'POST':
+        
+        user = User.query.filter_by(username=username).first()
+        print('Input: {}'.format(user))
+
+        if user is None or not user.check_password(password):
+                flash('Username or password incorrect')
+                res={'res':'Username or password incorrect'}
+                return (json.dumps(res),200)
+                
+        else:
+            session['logged_in_user'] = user.userid
+            res = {'res': 'User Logged in: {}'.format(user.userid)}
+            return (json.dumps(res),200)
+            
+    return ('Error Login, Blame Ronald',204)
+
+
+
     
 
 
