@@ -20,6 +20,7 @@ const MyMapComponent = compose(
 
             this.setState({
                 position: { lat: 28.6024, lng: -81.2001 },
+                zoom: 15,
                 onMarkerMounted: ref => {
                     refs.marker = ref;
                 },
@@ -31,26 +32,32 @@ const MyMapComponent = compose(
 
                 onClick: (info) => {
                     let info1 = info
-                    console.log(info.la)
-                    console.log(info.latLng)
-                    console.log(info)
-                    this.setState({ position: info.latLng })
-                    const position = info.latLng;                    
-                    return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
+                    //console.log(info.la)
+                    //console.log(info.latLng)
+                    //console.log(info)
+                    this.setState({ position: info.latLng, isMarkerShown: true })
+                    //const position = info.latLng;                    
+                    //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
+                },
+
+                doubleclick: () =>{
+                    this.setState({zoom: 25 })
                 },
 
                 
 
 
-                isMarkerShown: true,
+                isMarkerShown: false,
             })
         },
     }),
     withScriptjs,
     withGoogleMap
 )((props) =>
-    <GoogleMap defaultZoom={15} defaultCenter={{ lat: 28.6024, lng: -81.2001 }} onClick={props.onClick}>
-        {props.isMarkerShown && <Marker position={props.position} draggable={true} ref={props.onMarkerMounted} onPositionChanged={props.onPositionChanged} onClick = {props.onClick}/>}
+    <GoogleMap defaultZoom={props.zoom} defaultCenter={{ lat: 28.6024, lng: -81.2001 }} onClick={props.onClick} onDblClick={props.doubleclick}>
+        {props.isMarkerShown && <Marker position={props.position} draggable={true} ref={props.onMarkerMounted} onPositionChanged={props.onPositionChanged} onClick = {props.onClick} onDblClick={props.doubleclick}/>}
+    >
+    
     </GoogleMap>
     )
 
