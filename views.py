@@ -42,6 +42,7 @@ class Rso(db.Model):
     rsoname = db.Column(db.String(256), unique=True, nullable=False)
 
     withuser = db.relationship('User_in_rso', backref='Rso',lazy=True)
+    ofevent = db.relationship('Events',backref='Rso',lazy=True)
 
     def __init__(self, name):
         self.rsoname = name
@@ -63,15 +64,23 @@ class Events(db.Model):
     name = db.Column(db.String(256), unique=True, nullable=False)
     description = db.Column(db.String(512))
     rating = db.Column(db.String(32))
+    lat = db.Column(db.String(32))
+    lng = db.Column(db.String(32))
+    private = db.Column(db.Boolean, nullable=False)
     createdby = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    rsoid = db.Column(db.Integer, db.ForeignKey('rso.rsoid'), nullable=False)
 
     attendees = db.relationship('Event_attendees',backref='Events',lazy=True)
 
-    def __init__(self, name, description, createdby,rating=0):
+    def __init__(self, name, description, createdby, rsoid,rating=0, lat=-81.2000599, lng=28.6024274, private=False):
         self.name=name
         self.description=description
         self.createdby=createdby
+        self.rsoid=rsoid
         self.rating=rating
+        self.lat=lat
+        self.lng=lng
+        self.private = private
 
 class Event_attendees(db.Model):
 
@@ -177,9 +186,10 @@ def role():
 
 @app.route('/addevent', methods=['GET','POST'])
 @login_required
-def add_even():
+def add_event():
 
     if request.method == 'POST':
+
 
         user = User.query.filter_by(userid=session['logged_in_user']).first()
 
@@ -187,9 +197,26 @@ def add_even():
         eventname = data['name']
         description = data['description']
         rating = data['rating']
+        rsoid = data['rsoid']
         createdby = user.userid
 
-        new_event=Events(eventname,description,createdby,rating=rating)
+        isDuplicate = Events.query.filter_by(name=eventname).first()
+        
+        if isDuplicate:
+            res = {'res': 'Event already exists'}
+            return('Event already exists',200)
+
+        new_event=Events(eventname,description,createdby,rsoid,rating=rating)
+
+        if "lat" in data and "lng" in data:
+            new_event.lat=data['lat']
+            new_event.lng=data['lng']
+        if "private" in data:
+            print('here')
+            if data['private'].lower() == 'true': 
+                print('here1')
+                new_event.private = True
+            
 
         db.session.add(new_event)
         db.session.commit()
@@ -208,10 +235,6 @@ def add_even():
         return(json.dumps(res),200)
 
         
-
-
-
-
     return ('Ron def screwed up, blame him',204)
 
 
