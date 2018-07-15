@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Markers from '../googleMaps/Markers';
-import {Button} from 'reactstrap';
+import {CommentsSidePanel} from './CommentsSidePanel';
+//import {Button} from 'reactstrap';
 //import Prompt from 'Prompt'
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
@@ -32,6 +33,13 @@ class EventPage extends Component {
         //<Markers func = {this.child.pingToLocation()}/>
     }
 
+    openComments (obj){
+        console.log("hi");
+        CommentsSidePanel
+        
+        //return <CommentsSidePanel />
+    }
+
     render() {
 
         const data = [
@@ -61,6 +69,7 @@ class EventPage extends Component {
 
             
             <div class="table-wrapper">
+            <CommentsSidePanel />
             <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}">Create Event</button>
             <li></li>
             <div><Markers/> </div>
@@ -93,6 +102,8 @@ class EventPage extends Component {
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.email}</td>
                         <td> 
                         <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.location)}  data-button="{{contact.id}}">Ping to Location</button>
+                        &nbsp;
+                        <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments(obj.location)}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
                         </td>
                     </tr>
 
