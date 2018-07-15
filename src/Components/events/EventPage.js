@@ -16,7 +16,8 @@ class EventPage extends Component {
         this.state = {
             lat: 0,
             lng: 0,
-            showComments: false
+            showComments: false,
+            commentsToBeShown:[]
          };
 
         this.getLocation = this.getLocation.bind(this);
@@ -36,11 +37,11 @@ class EventPage extends Component {
         //<Markers func = {this.child.pingToLocation()}/>
     }
 
-    openComments (){
-        console.log("hi");
-        this.setState({showComments: true});
+    openComments (comments){
+        console.log(comments);
+        this.setState({showComments: true, commentsToBeShown: comments});
         console.log(this.state.showComments);
-        this.displayingComments = <CommentsSidePanel onComments = {this.getData}/>
+        this.displayingComments = <CommentsSidePanel onComments = {this.getData} theComments= {this.props.commentsToBeShown} />
     }
 
     closeComments = () =>{
@@ -60,7 +61,8 @@ class EventPage extends Component {
                 "date": "07/16/2018",
                 "location": "lat: 28.600720 lng: -81.197718",
                 "phone": "(352) 555-5555",
-                "email": "someplace@gmail.com"
+                "email": "someplace@gmail.com",
+                "comments":["Bill:hi", "Bill:where is everyone???","Bill:No one showed up" , "Bill:I'm all alone"]
             },
             {
                 "name": "more Jank",
@@ -70,7 +72,8 @@ class EventPage extends Component {
                 "date": "07/16/2018",
                 "location": "lat: 28.599900 lng: -81.200325",
                 "phone": "(352) 555-5555",
-                "email": "someplace@gmail.com"
+                "email": "someplace@gmail.com",
+                "comments":["Phil:hi", "Phil:where is everyone???","Phil:No one showed up" , "Phil:I'm all alone"]
             },
           ];
 
@@ -113,7 +116,7 @@ class EventPage extends Component {
                         <td> 
                         <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.location)}  data-button="{{contact.id}}">Ping to Location</button>
                         &nbsp;
-                        <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments()}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
+                        <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
                         </td>
                     </tr>
 
