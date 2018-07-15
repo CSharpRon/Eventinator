@@ -238,6 +238,21 @@ def add_event():
     return ('Ron def screwed up, blame him',204)
 
 
+@app.route('/getrso', methods=['GET'])
+def get_rso():
+
+    data = {}
+
+    listofrso= Rso.query.all()
+
+    for rso in listofrso:
+
+        data[rso.rsoname] = rso.rsoid
+
+    return (json.dumps(data), 200)
+
+
+
 
 
     
