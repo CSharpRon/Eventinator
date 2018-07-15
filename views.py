@@ -11,6 +11,8 @@ CORS(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
+roles = ['User','Admin','Superuser']
+
 class User(db.Model):
     
     userid = db.Column(db.Integer, primary_key=True)
@@ -82,6 +84,15 @@ class Event_attendees(db.Model):
         self.eventatid=eventid
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in_user' not in session:
+            return ('User not logged in',204)
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -105,7 +116,7 @@ def register():
             session['logged_in_user'] = new_user.userid
             flash('Sucessfull!')
 
-            res = {'res' : 'Registration Successful!'}
+            res = {'res' : 'Registration Successful!', 'userid': new_user.userid}
 
             return (json.dumps(res),200)
         
@@ -133,10 +144,36 @@ def login():
                 
         else:
             session['logged_in_user'] = user.userid
-            res = {'res': 'User Logged in: {}'.format(user.userid)}
+            res = {'res':'Successful!','userid': '{}'.format(user.userid)}
             return (json.dumps(res),200)
             
     return ('Error Login, Blame Ronald',204)
+
+@app.route('/role', methods=['GET', 'POST'])
+@login_required
+def role():
+
+    if request.method == 'POST':
+
+        newroleid = request.form['role']
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        ogid = user.roleid
+        user.roleid = newroleid
+        db.session.commit()
+
+        res = {'res': 'Successful!', 'currole': roles[ogid], 'newrole': roles[user.roleid]}
+
+        return (json.dumps(res),200)
+    
+    if request.method == 'GET':
+
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        res = {'res': 'Succesful', 'currole':roles[user.roleid]}
+
+        return (json.dumps(res), 200)
+
+    return ('Request Error, Blame Ron',200)
+
 
 
 
