@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import Markers from '../googleMaps/Markers';
+import {Button} from 'reactstrap';
+import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
 
+document.body.style = 'background: '+BACKGROUND+';';
 
 
 class EventPage extends Component {
@@ -54,12 +57,15 @@ class EventPage extends Component {
           ];
 
         return (
+
             
             <div class="table-wrapper">
+            <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}">Create Event</button>
+            <li></li>
             <div><Markers/> </div>
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
-                <tr>
+                <tr style={{'background-color': CATEGORY}}>
                 <th scope="col">Name</th>
                 <th scope="col">Event Category</th>
                 <th scope="col">Description</th>
@@ -75,7 +81,7 @@ class EventPage extends Component {
                 <input type="hidden" value="@item.Id" id="groupId"/>      
                 {data.map(obj =>{
                     return (
-                    <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}"> 
+                    <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}" style={{'background-color': ROWSCOLORS}}> 
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.name}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.eventCategory}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.descrition}</td>
@@ -101,7 +107,7 @@ class EventPage extends Component {
 }
 }
 
-function Button() {
+function Buttons() {
 
     return (
       React.createElement("button", null, "Go")
