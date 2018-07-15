@@ -63,25 +63,26 @@ class Events(db.Model):
     name = db.Column(db.String(256), unique=True, nullable=False)
     description = db.Column(db.String(512))
     rating = db.Column(db.String(32))
-
     createdby = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
 
     attendees = db.relationship('Event_attendees',backref='Events',lazy=True)
 
-    def __init__(self, name, description, rating):
+    def __init__(self, name, description, createdby,rating=0):
         self.name=name
         self.description=description
+        self.createdby=createdby
         self.rating=rating
 
 class Event_attendees(db.Model):
 
     eventatid = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'))
     eventid = db.Column(db.Integer, db.ForeignKey('events.eventid'), nullable=False)
+    name = db.Column(db.String(256), nullable=False)
 
-    def __init__(self,userid,eventid):
-        self.userid=userid
-        self.eventatid=eventid
+    def __init__(self,name,eventid):
+        self.name=name
+        self.eventid=eventid
 
 
 def login_required(f):
@@ -96,8 +97,7 @@ def login_required(f):
 
 @app.route('/register',methods=['GET','POST'])
 def register():
-
-
+    
     username= request.form['username']
     password= request.form['password']
 
@@ -173,6 +173,46 @@ def role():
         return (json.dumps(res), 200)
 
     return ('Request Error, Blame Ron',200)
+
+
+@app.route('/addevent', methods=['GET','POST'])
+@login_required
+def add_even():
+
+    if request.method == 'POST':
+
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+
+        data = request.get_json(force=True)
+        eventname = data['name']
+        description = data['description']
+        rating = data['rating']
+        createdby = user.userid
+
+        new_event=Events(eventname,description,createdby,rating=rating)
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        num_people=0
+
+        for people in data['attendees']:
+
+             new_attend = Event_attendees(people, new_event.eventid)
+             db.session.add(new_attend)
+             db.session.commit()
+             num_people = num_people + 1
+        
+        res = {'res': 'Successful', 'eventid':new_event.eventid, 'attendees': num_people }
+
+        return(json.dumps(res),200)
+
+        
+
+
+
+
+    return ('Ron def screwed up, blame him',204)
 
 
 
