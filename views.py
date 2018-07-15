@@ -104,6 +104,7 @@ def login_required(f):
 
 
 
+
 @app.route('/register',methods=['GET','POST'])
 def register():
     
@@ -125,7 +126,7 @@ def register():
             session['logged_in_user'] = new_user.userid
             flash('Sucessfull!')
 
-            res = {'res' : 'Registration Successful!', 'userid': new_user.userid}
+            res = {'res' : 'ok', 'userid': new_user.userid}
 
             return (json.dumps(res),200)
         
@@ -153,7 +154,7 @@ def login():
                 
         else:
             session['logged_in_user'] = user.userid
-            res = {'res':'Successful!','userid': '{}'.format(user.userid)}
+            res = {'res':'ok','userid': '{}'.format(user.userid)}
             return (json.dumps(res),200)
             
     return ('Error Login, Blame Ronald',204)
@@ -170,14 +171,14 @@ def role():
         user.roleid = newroleid
         db.session.commit()
 
-        res = {'res': 'Successful!', 'currole': roles[ogid], 'newrole': roles[user.roleid]}
+        res = {'res': 'ok', 'currole': roles[ogid], 'newrole': roles[user.roleid]}
 
         return (json.dumps(res),200)
     
     if request.method == 'GET':
 
         user = User.query.filter_by(userid=session['logged_in_user']).first()
-        res = {'res': 'Succesful', 'currole':roles[user.roleid]}
+        res = {'res': 'ok', 'currole':roles[user.roleid]}
 
         return (json.dumps(res), 200)
 
@@ -230,7 +231,7 @@ def add_event():
              db.session.commit()
              num_people = num_people + 1
         
-        res = {'res': 'Successful', 'eventid':new_event.eventid, 'attendees': num_people }
+        res = {'res': 'ok', 'eventid':new_event.eventid, 'attendees': num_people }
 
         return(json.dumps(res),200)
 
@@ -250,6 +251,20 @@ def get_rso():
         data[rso.rsoname] = rso.rsoid
 
     return (json.dumps(data), 200)
+
+@app.route('/addrso', methods=['POST'])
+def add_rso():
+
+    if request.method == 'POST':
+
+        name = request.form['rsoname']
+
+        new_rso = Rso(name)
+        db.session.add(new_rso)
+        db.session.commit()
+
+        res = {'res':'ok', 'name':new_rso.rsoname, 'rsoid': new_rso.rsoid}
+        return (json.dumps(res),200)
 
 
 
