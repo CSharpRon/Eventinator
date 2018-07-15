@@ -8,7 +8,7 @@ export class CommentsSidePanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isPaneOpen: false,
+            isPaneOpen: true,
             isPaneOpenLeft: false
         };
     }
@@ -32,6 +32,7 @@ export class CommentsSidePanel extends Component {
                 onRequestClose={ () => {
                     // triggered on "<" on left top click or on outside click
                     this.setState({ isPaneOpen: false });
+                    this.props.onComments(false);
                 } }>
                 <div>And I am pane content. BTW, what rocks?</div>
                 <br />
