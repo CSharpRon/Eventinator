@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Markers from '../googleMaps/Markers';
 import {Button} from 'reactstrap';
+//import Prompt from 'Prompt'
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
 
