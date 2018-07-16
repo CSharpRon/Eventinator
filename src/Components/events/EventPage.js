@@ -22,6 +22,7 @@ class EventPage extends Component {
             longitude: "",
             showCreatedEvent: true,
             showCreateContact: false,
+            showRSO: false,
             location: "",
             commentsToBeShown: [],
             data: []
@@ -42,6 +43,7 @@ class EventPage extends Component {
 
         this.storedLocation = null;
         this.displayingComments = null;
+        this.displayRSO = null
     }
 
     componentDidMount() {
@@ -166,17 +168,20 @@ class EventPage extends Component {
 
     openRSO (comments){
         console.log(comments);
-        this.setState({showCreatedEvent: true, commentsToBeShown: comments});
+        this.setState({showRSO: true, commentsToBeShown: comments});
         console.log(this.state.showCreatedEvent);
         
-        this.displayingComments = <RSOPage onRSO = {this.getRSO} theRSO = {this.props.commentsToBeShown} />
+        this.displayRSO = <RSOPage onRSO = {this.getRSO} theRSO = {this.props.commentsToBeShown} />
         console.log(this.getRSO);
     }
 
-    storeRSO(RSOData, selectedRSO){
-        console.log(RSOData);
-        console.log(selectedRSO);
-        
+    storeRSO(RSOData, selectedRSO, can){
+        if(can)
+        {
+            console.log(RSOData);
+            console.log(selectedRSO);
+        }
+
     }
 
     closeSidepanel = () =>{
@@ -250,6 +255,8 @@ class EventPage extends Component {
         </div> */}
            
            <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div>
+           <div> {this.state.showRSO ? this.displayRSO: null}</div>
+           
 
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">

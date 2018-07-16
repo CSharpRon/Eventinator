@@ -45,7 +45,7 @@ export class RSOPage extends Component {
         this.setState({ isPaneOpen: false });
         console.log(this.refs.Rso.value);
      //   console.log(this.state.RSOs);
-     this.props.onRSO(this.state.RSOs, this.refs.selectRso.value);   
+     this.props.onRSO(this.state.RSOs, this.refs.selectRso.value, true);   
     }
  
     render() {
@@ -60,6 +60,7 @@ export class RSOPage extends Component {
                 onRequestClose={ () => {
                     // triggered on "<" on left top click or on outside click
                     this.setState({ isPaneOpen: false });
+                    this.props.onRSO(null, null, false);  
                    // this.props.onComments(this.state.event);
 
                 } }>
