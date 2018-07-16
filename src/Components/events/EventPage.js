@@ -173,8 +173,9 @@ class EventPage extends Component {
         console.log(this.getRSO);
     }
 
-    storeRSO(RSOData){
+    storeRSO(RSOData, selectedRSO){
         console.log(RSOData);
+        console.log(selectedRSO);
         
     }
 
