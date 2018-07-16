@@ -254,7 +254,7 @@ def add_event():
             new_event.lng=data['lng']
         if "private" in data:
             print('here')
-            if data['private'].lower() == 'true': 
+            if str(data['private']).lower() == 'true': 
                 print('here1')
                 new_event.private = True
             
