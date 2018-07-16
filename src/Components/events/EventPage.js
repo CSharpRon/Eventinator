@@ -259,13 +259,9 @@ class EventPage extends Component {
             </button>
         </div> */}
            
-<<<<<<< HEAD
-           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div> 
-=======
            <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div>
            <div> {this.state.showRSO ? this.displayRSO: null}</div>
            
->>>>>>> 657bdde0d2e1dbcd1c2da192022cb214d546f89f
 
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
