@@ -32,11 +32,10 @@ class LoginPage extends Component {
 
         axios(options)
             .then(function (response) {
-                window.alert('Login Successful: ' + response.data.res);
                 console.log(response);
+                this.props.onLoginSuccess(username);
             })
             .catch(function (error) {
-                window.alert('Login fail: ' + error);
                 console.log(error);
             });
     }
