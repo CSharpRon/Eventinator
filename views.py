@@ -133,6 +133,7 @@ class Event_attendees(db.Model):
 
 
 @app.route('/register',methods=['GET','POST'])
+@cross_origin(supports_credentials=True)
 def register():
 
     data = request.get_json(force=True)
