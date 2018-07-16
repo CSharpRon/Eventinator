@@ -39,9 +39,14 @@ class LoginPage extends Component {
 
         axios(options)
             .then(function (response) {
-                console.log(response);
-                test.props.onLoginSuccess(response.data.userid);
-                test.props.history.push('/events');
+                
+                if(response.data.userid) {
+                    test.props.onLoginSuccess(response.data.userid);
+                    test.props.history.push('/events');
+                } else {
+                    window.alert(response.data.res);
+                }
+                
             })
             .catch(function (error) {
                 console.log(error);
