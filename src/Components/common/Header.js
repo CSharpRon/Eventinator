@@ -27,7 +27,9 @@ class Header extends Component {
                     </div>
                     <ul className="nav navbar-nav">
                         <li><Link to="/">Home</Link></li>
-                        <li><Link to="/events">Events</Link></li>
+                        {this.props.userid ? (
+                            <li><Link to="/events">Events</Link></li>
+                        ) : <div/>}
                     </ul>
                     {!this.props.userid ? (
                         <ul className="nav navbar-nav navbar-right">
