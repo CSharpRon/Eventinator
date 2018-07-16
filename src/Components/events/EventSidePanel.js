@@ -105,7 +105,7 @@ export class EventSidePanel extends Component {
                                                             <input name="attendees" type="text" class="form-control" id="attendees" ref="attendees">
                                                             </input>
                                                         </div>
-                                                        <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Contact</button>
+                                                        <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Event</button>
                                                         <button type="button" class="btn btn-alert" data-dismiss="modal">Cancel</button>
                                                     </div>
                                                 </div>
