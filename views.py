@@ -4,12 +4,17 @@ from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
+
+now = datetime.datetime.now()
 
 
 app = Flask(__name__)
 CORS(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+
+roles = ['User','Admin','Superuser']
 
 class User(db.Model):
     
@@ -40,6 +45,7 @@ class Rso(db.Model):
     rsoname = db.Column(db.String(256), unique=True, nullable=False)
 
     withuser = db.relationship('User_in_rso', backref='Rso',lazy=True)
+    ofevent = db.relationship('Events',backref='Rso',lazy=True)
 
     def __init__(self, name):
         self.rsoname = name
@@ -61,37 +67,77 @@ class Events(db.Model):
     name = db.Column(db.String(256), unique=True, nullable=False)
     description = db.Column(db.String(512))
     rating = db.Column(db.String(32))
-
+    lat = db.Column(db.String(32))
+    lng = db.Column(db.String(32))
+    private = db.Column(db.Boolean, nullable=False)
     createdby = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    rsoid = db.Column(db.Integer, db.ForeignKey('rso.rsoid'), nullable=False)
+    date = db.Column(db.String(32))
+    phone = db.Column(db.String(32))
+    email = db.Column(db.String(32))
+    category = db.Column(db.String(64))
 
     attendees = db.relationship('Event_attendees',backref='Events',lazy=True)
 
-    def __init__(self, name, description, rating):
+    def __init__(self, name, description, createdby, rsoid, phone, email, category, date=now.strftime("%Y-%m-%d %H:%M"),rating=0, lat=-81.2000599, lng=28.6024274, private=False):
         self.name=name
         self.description=description
-        self.rating=rarting
+        self.createdby=createdby
+        self.rsoid=rsoid
+        self.rating=rating
+        self.lat=lat
+        self.lng=lng
+        self.private = private
+        self.phone = phone
+        self.email = email
+        self.date = date
+        self.category = category
+
+    def serialize(self):
+        return {
+                'eventid'       : str(self.eventid),
+                'name'          : str(self.name),
+                'description'   : str(self.description),
+                'rating'        : str(self.rating),
+                'lat'           : str(self.lat),
+                'lng'           : str(self.lng),
+                'private'       : str(self.private),
+                'phone'         : str(self.phone),
+                'email'         : str(self.email),
+                'date'          : str(self.date),
+                'category'      : str(self.category)
+                }
+
 
 class Event_attendees(db.Model):
 
     eventatid = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
+    userid = db.Column(db.Integer, db.ForeignKey('user.userid'))
     eventid = db.Column(db.Integer, db.ForeignKey('events.eventid'), nullable=False)
+    name = db.Column(db.String(256), nullable=False)
 
-    def __init__(self,userid,eventid):
-        self.userid=userid
-        self.eventatid=eventid
+    def __init__(self,name,eventid):
+        self.name=name
+        self.eventid=eventid
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in_user' not in session:
+            return ('User not logged in',204)
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 
 
 @app.route('/register',methods=['GET','POST'])
 def register():
+    
+    username= request.form['username']
+    password= request.form['password']
 
-    data = request.get_json(force=True)
-
-    username= data.get('username')
-    password= data.get('password')
-
-    print(data)
 
     if request.method == 'POST':
 
@@ -107,7 +153,7 @@ def register():
             session['logged_in_user'] = new_user.userid
             flash('Sucessfull!')
 
-            res = {'res' : 'Registration Successful!'}
+            res = {'res' : 'ok', 'userid': new_user.userid}
 
             return (json.dumps(res),200)
         
@@ -116,10 +162,206 @@ def register():
             return (json.dumps(res),200)
 
     return ('Unknown Error, Blame Ronald', 204)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     
+    username= request.form['username']
+    password= request.form['password']
+        
+    if request.method == 'POST':
+        
+        user = User.query.filter_by(username=username).first()
+        print('Input: {}'.format(user))
+
+        if user is None or not user.check_password(password):
+                flash('Username or password incorrect')
+                res={'res':'Username or password incorrect'}
+                return (json.dumps(res),200)
+                
+        else:
+            session['logged_in_user'] = user.userid
+            res = {'res':'ok','userid': '{}'.format(user.userid)}
+            return (json.dumps(res),200)
+            
+    return ('Error Login, Blame Ronald',204)
+
+@app.route('/role', methods=['GET', 'POST'])
+@login_required
+def role():
+
+    if request.method == 'POST':
+
+        newroleid = request.form['role']
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        ogid = user.roleid
+        user.roleid = newroleid
+        db.session.commit()
+
+        res = {'res': 'ok', 'currole': roles[ogid], 'newrole': roles[user.roleid]}
+
+        return (json.dumps(res),200)
+    
+    if request.method == 'GET':
+
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        res = {'res': 'ok', 'currole':roles[user.roleid]}
+
+        return (json.dumps(res), 200)
+
+    return ('Request Error, Blame Ron',200)
+
+
+@app.route('/addevent', methods=['GET','POST'])
+@login_required
+def add_event():
+
+    if request.method == 'POST':
+
+
+        user = User.query.filter_by(userid=session['logged_in_user']).first()
+
+        data = request.get_json(force=True)
+        eventname = data['name']
+        description = data['description']
+        rating = data['rating']
+        rsoid = data['rsoid']
+        date = data['date']
+        phone = data['phone']
+        email = data['email']
+        category=data['category']
+        createdby = user.userid
+
+        isDuplicate = Events.query.filter_by(name=eventname).first()
+        
+        if isDuplicate:
+            res = {'res': 'Event already exists'}
+            return('Event already exists',200)  
+
+        new_event=Events(eventname,description,createdby,rsoid, phone, email, category, date, rating=rating)
+
+        if "lat" in data and "lng" in data:
+            new_event.lat=data['lat']
+            new_event.lng=data['lng']
+        if "private" in data:
+            print('here')
+            if data['private'].lower() == 'true': 
+                print('here1')
+                new_event.private = True
+            
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        num_people=0
+
+        for people in data['attendees']:
+
+             new_attend = Event_attendees(people, new_event.eventid)
+             db.session.add(new_attend)
+             db.session.commit()
+             num_people = num_people + 1
+        
+        res = {'res': 'ok', 'eventid':new_event.eventid, 'attendees': num_people }
+
+        return(json.dumps(res),200)
+
+        
+    return ('Ron def screwed up, blame him',204)
+
+
+@app.route('/getrso', methods=['GET'])
+@login_required
+def get_rso():
+
+    data = {}
+
+    listofrso= Rso.query.all()
+
+    for rso in listofrso:
+
+        data[rso.rsoname] = rso.rsoid
+
+    return (json.dumps(data), 200)
+
+@app.route('/addrso', methods=['POST'])
+@login_required
+def add_rso():
+
+    if request.method == 'POST':
+
+        name = request.form['rsoname']
+
+        new_rso = Rso(name)
+        db.session.add(new_rso)
+        db.session.commit()
+
+        res = {'res':'ok', 'name':new_rso.rsoname, 'rsoid': new_rso.rsoid}
+        return (json.dumps(res),200)
+    
+    return("Ron f'ed up this time",204)
+
+
+@app.route('/rsouser', methods=['GET','POST'])
+@login_required
+def rso_user():
+
+    if request.method == 'GET':
+        
+        userid = session['logged_in_user']
+
+        query = User_in_rso.query.filter_by(userid=userid)
+
+        data = {}
+
+        for q in query:
+
+            rso = Rso.query.filter_by(rsoid=q.rsoid).first()
+
+            data[rso.rsoname] = rso.rsoid
+
+        data['res'] = 'ok'
+
+        return (json.dumps(data),200)
 
 
 
+    if request.method == 'POST':
+
+        rso = request.form['rsoid']
+
+        new_userrso = User_in_rso(session['logged_in_user'], rso)
+
+        db.session.add(new_userrso)
+        db.session.commit()
+
+        rsoq = Rso.query.filter_by(rsoid=rso).first()
+
+        res = {'res':'ok', 'rsoid':rso, 'rso': rsoq.rsoname,'userid': session['logged_in_user']}
+
+        return (json.dumps(res),200)
+    
+    return ('Ron royally messed up', 204)
 
 
+@app.route('/getevents', methods=['GET','POST'])
+def get_events():
 
+    userid=session['logged_in_user']
+
+    user_in_rso = User_in_rso.query.filter_by(userid=userid)
+
+    rsolist = [rso.rsoid for rso in user_in_rso]
+
+    eventlist = []
+
+    for r in rsolist:
+
+        eventrso = Events.query.filter_by(rsoid=r)
+
+        [eventlist.append(e) for e in eventrso]
+
+
+    payload = [x.serialize() for x in eventlist]
+
+    return (json.dumps(payload),200)
