@@ -69,7 +69,7 @@ class Events(db.Model):
     rating = db.Column(db.String(32))
     lat = db.Column(db.String(32))
     lng = db.Column(db.String(32))
-    private = db.Column(db.Boolean, nullable=False)
+    isPrivate = db.Column(db.Boolean, nullable=False)
     createdby = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
     rsoid = db.Column(db.Integer, db.ForeignKey('rso.rsoid'), nullable=False)
     date = db.Column(db.String(32))
@@ -79,7 +79,7 @@ class Events(db.Model):
 
     attendees = db.relationship('Event_attendees',backref='Events',lazy=True)
 
-    def __init__(self, name, description, createdby, rsoid, phone, email, category, date=now.strftime("%Y-%m-%d %H:%M"),rating=0, lat=-81.2000599, lng=28.6024274, private=False):
+    def __init__(self, name, description, createdby, rsoid, phone, email, category, date=now.strftime("%Y-%m-%d %H:%M"),rating=0, lat=-81.2000599, lng=28.6024274, isPrivate=False):
         self.name=name
         self.description=description
         self.createdby=createdby
@@ -87,7 +87,7 @@ class Events(db.Model):
         self.rating=rating
         self.lat=lat
         self.lng=lng
-        self.private = private
+        self.isPrivate = isPrivate
         self.phone = phone
         self.email = email
         self.date = date
@@ -101,7 +101,7 @@ class Events(db.Model):
                 'rating'        : str(self.rating),
                 'lat'           : str(self.lat),
                 'lng'           : str(self.lng),
-                'private'       : str(self.private),
+                'isPrivate'       : str(self.isPrivate),
                 'phone'         : str(self.phone),
                 'email'         : str(self.email),
                 'date'          : str(self.date),
@@ -262,11 +262,11 @@ def add_event():
         if "lat" in data and "lng" in data:
             new_event.lat=data['lat']
             new_event.lng=data['lng']
-        if "private" in data:
+        if "isPrivate" in data:
             print('here')
-            if str(data['private']).lower() == 'true': 
+            if str(data['isPrivate']).lower() == 'true': 
                 print('here1')
-                new_event.private = True
+                new_event.isPrivate = True
             
 
         db.session.add(new_event)
