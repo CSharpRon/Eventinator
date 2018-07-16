@@ -176,7 +176,7 @@ export class EventSidePanel extends Component {
  
 </div>
             </SlidingPane>
-            <button onClick={()=>this.setState({ isPaneOpen: true })}>Test</button>
+
         </div>;
     }
 }
