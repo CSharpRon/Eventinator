@@ -50,6 +50,34 @@ export class EventSidePanel extends Component {
         lng: "1",private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
         category: this.refs.category.value, attendees: this.refs.attendees.value}});
     }
+
+    renderRso(){
+
+        var data = {
+            "res":"ok",
+            "ASM":1,
+            "Bio":2,
+            "C#":3,
+        }
+
+        var res = []
+
+        console.log(data)
+
+        for (var i in data){
+
+            if (i !='res'){
+            res.push(<option value={i}>{i}</option>)
+            }
+
+        }
+        
+        console.log(res)
+
+        return res
+
+
+    }
  
     render() {
         return <div ref={ref => this.el = ref}>  
@@ -108,6 +136,17 @@ export class EventSidePanel extends Component {
     <label for="attendees">Attendees</label>
      <input name="attendees" type="text" class="form-control" id="attendees" ref="attendees">
      </input>
+   </div>
+
+   <div class="form-group">
+    <label for="rso" style={{paddingRight:10,}}>RSO</label>
+    <br />
+
+        <select >
+            {this.renderRso()}
+        </select>
+
+
    </div>
  
  <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Contact</button>
