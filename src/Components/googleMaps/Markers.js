@@ -32,11 +32,16 @@ const MyMapComponent = compose(
 
                 onClick: (info) => {
                     let info1 = info
-                    //console.log(info.la)
-                    console.log(info.latLng)
+                    //console.log(this.props);
                     //console.log(info)
-                    this.setState({ position: info.latLng, isMarkerShown: true })
-                    //const position = info.latLng;                    
+                    console.log(this.state.position.lat+' '+this.state.position.lng);
+                    console.log(info);
+                    this.setState({ position: info.latLng, isMarkerShown: true });
+                    console.log(this.state.position.lat+' '+this.state.position.lng);
+                    
+                   //this.props.getLoc(this.state.position.lat+' '+this.state.position.lng);
+                    
+                   //const position = info.latLng;                    
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
 

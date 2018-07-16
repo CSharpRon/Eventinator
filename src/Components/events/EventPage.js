@@ -17,15 +17,20 @@ class EventPage extends Component {
             lng: 0,
             showCreatedEvent: false,
             showCreateContact: false,
+            location: "",
             commentsToBeShown:[],
             data: []
             
          };
 
+         this.getCreatedEvent = this.storeEvent.bind(this);
+         this.createdEvent = null;
+        
+         this.getLatLng = this.storeLocation.bind(this);
         this.getLocation = this.getLocation.bind(this);
-        this.getCreatedEvent = this.storeEvent.bind(this);
+        //this.getLatLng = this.storeLatLng;
+        this.storedLocation = null;
         this.displayingComments = null;
-        this.createdEvent = null;
     }
 
     createEvent(showSidepanel){
@@ -33,6 +38,7 @@ class EventPage extends Component {
         
         //console.log(showSidepanel);
         this.setState({showCreatedEvent: true, commentsToBeShown: showSidepanel});
+        this.storedLocation = <Markers getLoc = {this.getLatLng} theComments= {this.props.location} />
         this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
         //console.log(this.displayingComments);
         //console.log(this.getCreatedEvent);
@@ -40,19 +46,28 @@ class EventPage extends Component {
     }
 
     storeEvent(stuff){
-        console.log(stuff);
+        console.log(stuff.event);
+        this.state.data.push(stuff.event);
         this.setState({showCreatedEvent: false});
+        
     }
 
     //we can use this function to ping to a location of an event
     getLocation (obj){
         console.log(obj);
+        console.log("hi");
         
 
         //opens a new google map window to the location of the event.
         window.open('http://maps.google.com/maps?q='+ obj, '_blank');
         //<Markers func = {this.child.pingToLocation()}/>
     }
+
+    storeLocation(passedLocation){
+        console.log(passedLocation);
+
+    }
+
 
     openComments (comments){
         console.log(comments);
@@ -112,7 +127,7 @@ class EventPage extends Component {
             },
           ];
 
-          this.addData(exampleData);
+//          this.addData(exampleData);
 
         return (
 

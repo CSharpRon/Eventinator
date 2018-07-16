@@ -40,14 +40,14 @@ export class CommentsSidePanel extends Component {
     addEvent(objs){
         //return this.;
         //console.log(this.state.event);
-        this.setState({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0",
-        private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
+        this.setState({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0", lat: "1",
+        lng: "1", private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
         category: this.refs.category.value, attendees: this.refs.attendees.value}});
         
         this.setState({ isPaneOpen: false });
         //return this.state.event;
-        this.props.onComments({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0",
-        private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
+        this.props.onComments({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0", lat: "1",
+        lng: "1",private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
         category: this.refs.category.value, attendees: this.refs.attendees.value}});
     }
  
