@@ -56,9 +56,41 @@ class EventPage extends Component {
             stuff.event.lat = this.state.latitude;
             stuff.event.lng = this.state.longitude;
 
-            this.state.data.push(stuff.event);
+            var name = stuff.event.name;
+            var description = stuff.event.description;
+            var lat = stuff.event.lat;
+            var lng = stuff.event.lng;
+            var isPrivate = stuff.event.private;
+            var rsoid = stuff.event.rsoid;
+            var date = stuff.event.date;
+            var email = stuff.event.email;
+            var phone = stuff.event.phone;
+            var category = stuff.event.category;
+            var rating = stuff.event.rating;
+            var attendees = stuff.event.attendees;
+            var userid = this.props.userid;
+    
+            var url = endpoint + '/addevent'
+    
+            const options = {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                data: JSON.stringify({ userid, name, description, lat, lng, isPrivate, rsoid, date, email, phone, category, rating, attendees, userid }),
+                url,
+            };
+    
+            axios(options)
+                .then(function (response) {
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+    
+            this.showSidepanel = false;
+            this.refreshEvents();
         }
-        
+
         this.setState({showCreatedEvent: false});
         
     }
