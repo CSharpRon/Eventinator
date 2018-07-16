@@ -1,4 +1,5 @@
-import React from "react"
+import React, {Component} from "react"
+import { render } from 'react-dom';
 import { compose, withProps, lifecycle } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 import {KEY} from "./account"
@@ -7,7 +8,7 @@ import {KEY} from "./account"
 
 
 
-const MyMapComponent = compose(
+export const MyMapComponent = compose(
     withProps({
         googleMapURL: "https://maps.googleapis.com/maps/api/js?key="+KEY+"&libraries=geometry,drawing,places",
         loadingElement: <div style={{ height: `100%` }} />,
@@ -24,24 +25,25 @@ const MyMapComponent = compose(
                 onMarkerMounted: ref => {
                     refs.marker = ref;
                 },
-
+                
                 onPositionChanged: () => {
                     const position = refs.marker.getPosition;
                     console.log(position.toString());
                 },
-
+                
                 onClick: (info) => {
                     let info1 = info
-                    //console.log(this.props);
-                    //console.log(info)
-                    console.log(this.state.position.lat+' '+this.state.position.lng);
-                    console.log(info);
+                    
+                    console.log(this.props)
+                    //console.log(this.state.position);
+                    //console.log(this.state.position.lat+' '+this.state.position.lng);
                     this.setState({ position: info.latLng, isMarkerShown: true });
-                    console.log(this.state.position.lat+' '+this.state.position.lng);
-                    
-                   //this.props.getLoc(this.state.position.lat+' '+this.state.position.lng);
-                    
-                   //const position = info.latLng;                    
+                    //console.log(this.state.position);
+                    //console.log(refs.marker.getPosition().toString());
+                    //this.props.getLoc(this.state.position.lat+' '+this.state.position.lng);
+                    //Markers.clicked();
+                    //const position = info.latLng;            
+                    this.props.loc(refs.marker.getPosition().toString());        
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
 
@@ -54,7 +56,6 @@ const MyMapComponent = compose(
                     
                     
                     //this.setState({ position: [ lati, long], isMarkerShown: true })
-                    
                     //const position = info.latLng;                    
                     //return(<Marker position={{ lat: info.lat, lng: info.lng}}/>)
                 },
@@ -80,33 +81,43 @@ const MyMapComponent = compose(
     </GoogleMap>
     )
 
-class Markers extends React.PureComponent {
+export class Markers extends Component {
     
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             isMarkerShown: false,
-            position: { lat: -34.397, lng: 150.644 }
-        }
+            position: { lat: -34.397, lng: 150.644 },
+            str: ""
+        };
 
-    }
-    state = {
-        isMarkerShown: false,
+        this.getLoc = this.clicked.bind(this);
+        this.setLoc = null;
     }
 
+    //this function returns the lat and lng position of the marker
+    clicked = (obj) => {
+       // console.log("hi");
+        //console.log(obj);
+      //  console.log(this.props);
+        //console.log(this.setLoc);
+        this.props.getLocation(obj);
+    }
 
     render() {
         return (
+
+
         <div>
             <div>
-                <MyMapComponent isMarkerShown={true} />
+                this.setLoc = <MyMapComponent isMarkerShown={true} loc = {this.getLoc} theLocation = {this.str}/>
             </div>
-
+            
         {/*<button title="Log" onClick={()=> console.log(this.props.onPositionChanged}> Penis </button> */}
         </div>
         )
     }
 }
 
-
+render(<Markers />, document.getElementById('root'));
 export default Markers;

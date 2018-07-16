@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Markers from '../googleMaps/Markers';
+import {Markers, MyMapComponent} from '../googleMaps/Markers';
 import {CommentsSidePanel} from './CommentsSidePanel';
 //import {Button} from 'reactstrap';
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
@@ -15,6 +15,8 @@ class EventPage extends Component {
         this.state = {
             lat: 0,
             lng: 0,
+            latitude: "",
+            longitude: "",
             showCreatedEvent: false,
             showCreateContact: false,
             location: "",
@@ -26,7 +28,7 @@ class EventPage extends Component {
          this.getCreatedEvent = this.storeEvent.bind(this);
          this.createdEvent = null;
         
-         this.getLatLng = this.storeLocation.bind(this);
+        this.getLatLng = this.storeLocation.bind(this);
         this.getLocation = this.getLocation.bind(this);
         //this.getLatLng = this.storeLatLng;
         this.storedLocation = null;
@@ -37,8 +39,10 @@ class EventPage extends Component {
         this.state.showCreateContact = true;
         
         //console.log(showSidepanel);
+        console.log(this.state.latitude);
         this.setState({showCreatedEvent: true, commentsToBeShown: showSidepanel});
-        this.storedLocation = <Markers getLoc = {this.getLatLng} theComments= {this.props.location} />
+        //this.storedLocation = <Markers  getLocation = {this.getLatLng} theComments= {this.props.location} />
+        //this.storedLocation = <MyMapComponent isMarkerShown={true} loc = {this.getLatLng} theComments = {this.props.location}/>
         this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
         //console.log(this.displayingComments);
         //console.log(this.getCreatedEvent);
@@ -46,10 +50,23 @@ class EventPage extends Component {
     }
 
     storeEvent(stuff){
-        console.log(stuff.event);
+        //sets the locaotion of the newly crearted event
+        stuff.event.lat = this.state.latitude;
+        stuff.event.lng = this.state.longitude;
+        
         this.state.data.push(stuff.event);
         this.setState({showCreatedEvent: false});
         
+    }
+    
+    storeLocation(passedLocation){
+        //console.log(passedLocation.substr(1,passedLocation.indexOf(", ")-1));
+        //store the latitude to the related varible in state
+        this.state.latitude = passedLocation.substr(1,passedLocation.indexOf(", ") -1);
+        
+        //store the longitude to the related varible in state
+        this.state.longitude = passedLocation.substr(passedLocation.indexOf(", ") +2, passedLocation.lastIndexOf(")")-1);
+        this.state.longitude = this.state.longitude.substr(0,this.state.longitude.length-1);    
     }
 
     //we can use this function to ping to a location of an event
@@ -63,10 +80,6 @@ class EventPage extends Component {
         //<Markers func = {this.child.pingToLocation()}/>
     }
 
-    storeLocation(passedLocation){
-        console.log(passedLocation);
-
-    }
 
 
     openComments (comments){
@@ -136,7 +149,8 @@ class EventPage extends Component {
             <div class="table-wrapper">
                 <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}" onClick={() => this.createEvent()} >Create Event</button>
                 <li></li>
-                <div><Markers/> </div>
+                {/* <div><Markers/> </div> */}
+                {<Markers  getLocation = {this.getLatLng} theLocation= {this.props.location} />}
              {/* <CommentsSidePanel /> */}
            
 
