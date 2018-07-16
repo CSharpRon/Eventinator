@@ -130,7 +130,6 @@ export class EventSidePanel extends Component {
                 onRequestClose={() => {
                     // triggered on "<" on left top click or on outside click
                     this.setState({ isPaneOpen: false });
-<<<<<<< HEAD
                     // this.props.onComments(this.state.event);
 
                 }}>
@@ -194,70 +193,6 @@ export class EventSidePanel extends Component {
 
                 </div>
 
-=======
-                   // this.props.onComments(this.state.event);
-
-                } }>
-                    <div class="modal-body">
-  
-  <div class="form-group">
-     <label for="inputFirstName">Event Name</label>
-     <input name="event_name" type="name" class="form-control" id="eventName" ref="eventName" placeholder="Event Name" required="">
-     </input>
-   </div>
-   
-   <div class="form-group">
-       <label for="description">Description</label>
-       <input name="description" type="name" class="form-control" id="description" placeholder="Description" ref="description" required="">
-       </input>
-   </div>
-   
-   <div class="form-group">
-     <label for="date">Date</label>
-     <input name= "date" type="text" class="form-control" id="date" ref="date" placeholder="12/27/2018">
-     </input>
-   </div>
-   
-   <div class="form-group">
-     <label for="phone">Phone Number</label>
-     <input name="phone" type="text" class="form-control" id="phone" ref="phone" placeholder="555 555-5555">
-     </input>
-   </div>
-   
-   <div class="form-group">
-     <label for="email">Email</label>
-     <input name="email" type="text" class="form-control" id="email" ref ="email" placeholder="titties@titties.edu">
-     </input>
-   </div>
-   
-   <div class="form-group">
-     <label for="category">Category</label>
-     <input name="category" type="text" class="form-control" id="category" ref="category">
-     </input>
-   </div>
-   
-   <div class="form-group">
-    <label for="attendees">Attendees</label>
-     <input name="attendees" type="text" class="form-control" id="attendees" ref="attendees">
-     </input>
-   </div>
-
-   <div class="form-group">
-    <label for="rso" style={{paddingRight:10,}}>RSO</label>
-    <br />
-
-        <select >
-            {this.renderRso()}
-        </select>
-
-
-   </div>
- 
- <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Event</button>
- <button type="button" class="btn btn-alert" data-dismiss="modal">Cancel</button>
- 
-</div>
->>>>>>> 3461541d1d2140a50df1fd4fb31ca0fc918546bd
             </SlidingPane>
         </div>;
     }
