@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationApi from '../../Api/Authentication/authenticationApi';
 import axios from 'axios';
+import $ from 'jquery';
 
 class Register extends Component {
 
@@ -10,10 +11,26 @@ class Register extends Component {
         var username = 'ron';
         var password = 'jon';
 
-        axios.post(URL, {
-            username: this.username,
-            password: this.password
-        })
+        var url = 'http://ae97cacd.ngrok.io/register';
+
+        const options = {
+            method: 'POST',
+            headers: {'content-type': 'application/x-www-form-urlencoded',  },
+            data: JSON.stringify({ username, password }),
+            url,
+        };
+
+        axios(options)
+            .then(function (response) {
+                window.alert('test pass: ' + response);
+                console.log(response);
+            })
+            .catch(function (error) {
+                window.alert('test fail: ' + error);
+                console.log(error);
+            });
+
+
         // AuthenticationApi.register(username, password)
         //     .then((result) => {
         //         alert('success! ' + result);
@@ -43,7 +60,7 @@ class Register extends Component {
                             <div className="panel-body">
                                 <div className="row">
                                     <div className="col-lg-12">
-                                        <form id="register-form" role="form" style={{"display": "block"}}>
+                                        <div id="register-form" style={{ "display": "block" }}>
                                             <div className="form-group">
                                                 <input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
                                             </div>
@@ -59,11 +76,11 @@ class Register extends Component {
                                             <div className="form-group">
                                                 <div className="row">
                                                     <div className="col-sm-6 col-sm-offset-3">
-                                                        <button type="submit" name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} value="Register Now" />
+                                                        <button name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} value="Register Now" />
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
