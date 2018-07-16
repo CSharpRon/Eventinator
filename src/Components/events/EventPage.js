@@ -2,9 +2,17 @@ import React, {Component} from 'react';
 import {Markers, MyMapComponent} from '../googleMaps/Markers';
 import {EventSidePanel} from './EventSidePanel';
 //import {Button} from 'reactstrap';
+<<<<<<< HEAD
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 import axios from 'axios';
 import { endpoint } from '../../Api/URL_Const';
+=======
+import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1';
+import axios from 'axios';
+import { endpoint } from '../../Api/URL_Const';
+import {RSOPage} from './RSOPage';
+
+>>>>>>> origin/RSOPage
 
 document.body.style = 'background: '+BACKGROUND+';';
 
@@ -34,6 +42,10 @@ class EventPage extends Component {
         this.getLatLng = this.storeLocation.bind(this);
         this.getLocation = this.getLocation.bind(this);
         //this.getLatLng = this.storeLatLng;
+
+        this.getRSO = this.storeRSO.bind(this);
+        this.createdRSO = null;
+
         this.storedLocation = null;
         this.displayingComments = null;
     }
@@ -158,6 +170,20 @@ class EventPage extends Component {
         console.log(this.getCreatedEvent);
     }
 
+    openRSO (comments){
+        console.log(comments);
+        this.setState({showCreatedEvent: true, commentsToBeShown: comments});
+        console.log(this.state.showCreatedEvent);
+        
+        this.displayingComments = <RSOPage onRSO = {this.getRSO} theRSO = {this.props.commentsToBeShown} />
+        console.log(this.getRSO);
+    }
+
+    storeRSO(RSOData){
+        console.log(RSOData);
+        
+    }
+
     closeSidepanel = () =>{
         //console.log("hi");
         this.setState({showCreatedEvent: false});
@@ -213,7 +239,7 @@ class EventPage extends Component {
             
             
             <div class="table-wrapper">
-                <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}" onClick={() => this.createEvent()} >Create Event</button>
+                <button type="button" padding="10px" class="btn-lg center-block btn-info" data-button="{{contact.id}}" onClick={() => this.createEvent()} >Create Event</button>
                 <li></li>
                 {/* <div><Markers/> </div> */}
                 {<Markers  getLocation = {this.getLatLng} theLocation= {this.props.location} />}
@@ -264,6 +290,8 @@ class EventPage extends Component {
                         <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.lat+','+obj.lng)}  data-button="{{contact.id}}">Ping to Location</button>
                         &nbsp;
                         <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
+                        &nbsp;
+                        <button type="button" class="btn btn-info btn-sm remove-button" onClick={() => this.openRSO(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">RSO</button>
                         </td>
                     </tr>
 

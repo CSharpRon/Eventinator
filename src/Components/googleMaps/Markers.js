@@ -110,7 +110,7 @@ export class Markers extends Component {
 
         <div>
             <div>
-                this.setLoc = <MyMapComponent isMarkerShown={true} loc = {this.getLoc} theLocation = {this.str}/>
+                <MyMapComponent isMarkerShown={true} loc = {this.getLoc} theLocation = {this.str}/>
             </div>
             
         {/*<button title="Log" onClick={()=> console.log(this.props.onPositionChanged}> Penis </button> */}
