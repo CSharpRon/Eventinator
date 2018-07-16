@@ -1,17 +1,26 @@
-import Service from '../../Service/service';
+// import Service from '../../Service/service';
 
-class AuthenticationApi {
+// var url = 'http://95d8750a.ngrok.io';
+
+// class AuthenticationApi {
     
-    url = 'http://2ba3514d.ngrok.io/register';
+//     register(username, password) {
+        
+//         var regApi = url + '/register';
 
-    register(username, password) {
+//         const options = {
+//             method: 'POST',
+//             headers: {'content-type': "application/json",},
+//             data: JSON.stringify({username, password}),
+//             regApi,
+//         };
 
-        return new Promise((resolve, reject) => {
-            Service.doPost(this.url, {username, password})
-                .then((result) => resolve(result))
-                .catch((err) => reject(err));
-        });
-    }
-}
+//         return new Promise((resolve, reject) => {
+//             Service.doPost(options)
+//                 .then((result) => resolve(result))
+//                 .catch((err) => reject(err));
+//         });
+//     }
+// }
 
-export default new AuthenticationApi();
+// export default new AuthenticationApi();
