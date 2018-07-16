@@ -3,7 +3,11 @@ import { render } from 'react-dom';
 import Modal from 'react-modal';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
- 
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+axios.defaults.crossDomain = true;
+
 export class EventSidePanel extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +54,50 @@ export class EventSidePanel extends Component {
         lng: "1",private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
         category: this.refs.category.value, attendees: this.refs.attendees.value}});
     }
+
+    renderRso(){
+
+
+        var data = {
+            "res":"ok",
+            "ASM":1,
+            "Bio":2,
+            "C#":3,
+        }
+
+        const options = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json', 'userid': 1 },
+            url:'http://127.0.0.1:5000/rsouser',
+        };
+
+        axios(options)
+            .then(function (response) {
+                data=response.data
+                })
+            .catch(function (error) {
+                console.log('error: ' + error);
+            });
+
+
+        var res = []
+
+        console.log(data)
+
+        for (var i in data){
+
+            if (i !='res'){
+            res.push(<option value={i}>{i}</option>)
+            }
+
+        }
+        
+        console.log(res)
+
+        return res
+
+
+    }
  
     render() {
         return <div ref={ref => this.el = ref}>  
@@ -67,57 +115,64 @@ export class EventSidePanel extends Component {
 
                 } }>
                     <div class="modal-body">
-                        <form id="add_contact_form" action="{{ url_for('add_contact') }}" method="post">
-                                <div class="form-group">
-                            <div class="form-group">
-                                <div class="form-group col-md-6">
-                                    <label for="inputFirstName">Event Name</label>
-                                    <input name="event_name" type="name" class="form-control" id="eventName" ref="eventName" placeholder="Event Name" required="">
-                                    </input>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="form-group col-md-6">
-                                        <label for="description">Description</label>
-                                        <input name="description" type="name" class="form-control" id="description" placeholder="Description" ref="description" required="">
-                                        </input>
-                                    </div>
-                                
-                                    <div class="form-group">
-                                        <label for="date">Date</label>
-                                        <input name= "date" type="text" class="form-control" id="date" ref="date" placeholder="12/27/2018">
-                                        </input>
-                                        <div class="form-group">
-                                            <label for="phone">Phone Number</label>
-                                            <input name="phone" type="text" class="form-control" id="phone" ref="phone" placeholder="555 555-5555">
-                                            </input>
-                                            <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input name="email" type="text" class="form-control" id="email" ref ="email" placeholder="titties@titties.edu">
-                                                </input>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-9">
-                                                        <label for="category">Category</label>
-                                                        <input name="category" type="text" class="form-control" id="category" ref="category">
-                                                        </input>
-                                                        <div class="form-group col-md-10">
-                                                            <label for="attendees">Attendees</label>
-                                                            <input name="attendees" type="text" class="form-control" id="attendees" ref="attendees">
-                                                            </input>
-                                                        </div>
-                                                        <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Contact</button>
-                                                        <button type="button" class="btn btn-alert" data-dismiss="modal">Cancel</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <br />
+  
+  <div class="form-group">
+     <label for="inputFirstName">Event Name</label>
+     <input name="event_name" type="name" class="form-control" id="eventName" ref="eventName" placeholder="Event Name" required="">
+     </input>
+   </div>
+   
+   <div class="form-group">
+       <label for="description">Description</label>
+       <input name="description" type="name" class="form-control" id="description" placeholder="Description" ref="description" required="">
+       </input>
+   </div>
+   
+   <div class="form-group">
+     <label for="date">Date</label>
+     <input name= "date" type="text" class="form-control" id="date" ref="date" placeholder="12/27/2018">
+     </input>
+   </div>
+   
+   <div class="form-group">
+     <label for="phone">Phone Number</label>
+     <input name="phone" type="text" class="form-control" id="phone" ref="phone" placeholder="555 555-5555">
+     </input>
+   </div>
+   
+   <div class="form-group">
+     <label for="email">Email</label>
+     <input name="email" type="text" class="form-control" id="email" ref ="email" placeholder="titties@titties.edu">
+     </input>
+   </div>
+   
+   <div class="form-group">
+     <label for="category">Category</label>
+     <input name="category" type="text" class="form-control" id="category" ref="category">
+     </input>
+   </div>
+   
+   <div class="form-group">
+    <label for="attendees">Attendees</label>
+     <input name="attendees" type="text" class="form-control" id="attendees" ref="attendees">
+     </input>
+   </div>
+
+   <div class="form-group">
+    <label for="rso" style={{paddingRight:10,}}>RSO</label>
+    <br />
+
+        <select >
+            {this.renderRso()}
+        </select>
+
+
+   </div>
+ 
+ <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Contact</button>
+ <button type="button" class="btn btn-alert" data-dismiss="modal">Cancel</button>
+ 
+</div>
             </SlidingPane>
         </div>;
     }

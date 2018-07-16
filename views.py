@@ -193,14 +193,14 @@ def login():
     return ('Error Login, Blame Ronald',204)
 
 @app.route('/role', methods=['GET', 'POST'])
-
+@cross_origin(supports_credentials=True)
 def role():
 
     if request.method == 'POST':
 
         data = request.get_json(force=True)
         
-        userid = int(data['userid'])
+        userid = data['userid']
         #userid = session['logged_in_user']
 
         newroleid = data['role']
@@ -227,14 +227,14 @@ def role():
 
 
 @app.route('/addevent', methods=['GET','POST'])
-
+@cross_origin(supports_credentials=True)
 def add_event():
 
     if request.method == 'POST':
 
         data = request.get_json(force=True)
 
-        userid = int(data['userid'])
+        userid = data['userid']
         #userid = session['logged_in_user']
 
         user = User.query.filter_by(userid=userid).first()
@@ -249,7 +249,7 @@ def add_event():
         phone = data['phone']
         email = data['email']
         category=data['category']
-        createdby = user.userid
+        createdby = userid
 
         isDuplicate = Events.query.filter_by(name=eventname).first()
         
@@ -290,7 +290,7 @@ def add_event():
 
 
 @app.route('/getrso', methods=['GET'])
-
+@cross_origin(supports_credentials=True)
 def get_rso():
 
     data = {}
@@ -304,7 +304,7 @@ def get_rso():
     return (json.dumps(data), 200)
 
 @app.route('/addrso', methods=['POST'])
-
+@cross_origin(supports_credentials=True)
 def add_rso():
 
     if request.method == 'POST':
@@ -324,7 +324,7 @@ def add_rso():
 
 
 @app.route('/rsouser', methods=['GET','POST'])
-
+@cross_origin(supports_credentials=True)
 def rso_user():
 
     if request.method == 'GET':
@@ -354,7 +354,7 @@ def rso_user():
 
 
         rso = data['rsoid']
-        userid = int(data['userid'])
+        userid = data['userid']
 
         
 
@@ -373,6 +373,7 @@ def rso_user():
 
 
 @app.route('/getevents', methods=['GET','POST'])
+@cross_origin(supports_credentials=True)
 def get_events():
 
     userid=request.headers['userid']
@@ -381,7 +382,7 @@ def get_events():
     user_in_rso = User_in_rso.query.filter_by(userid=userid)
 
     rsolist = [rso.rsoid for rso in user_in_rso]
-    
+
     eventlist = []
 
     for r in rsolist:
