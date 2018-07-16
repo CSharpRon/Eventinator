@@ -75,10 +75,11 @@ class Events(db.Model):
     date = db.Column(db.String(32))
     phone = db.Column(db.String(32))
     email = db.Column(db.String(32))
+    category = db.Column(db.String(64))
 
     attendees = db.relationship('Event_attendees',backref='Events',lazy=True)
 
-    def __init__(self, name, description, createdby, rsoid, phone, email, date=now.strftime("%Y-%m-%d %H:%M"),rating=0, lat=-81.2000599, lng=28.6024274, private=False):
+    def __init__(self, name, description, createdby, rsoid, phone, email, category, date=now.strftime("%Y-%m-%d %H:%M"),rating=0, lat=-81.2000599, lng=28.6024274, private=False):
         self.name=name
         self.description=description
         self.createdby=createdby
@@ -90,6 +91,22 @@ class Events(db.Model):
         self.phone = phone
         self.email = email
         self.date = date
+        self.category = category
+
+    def serialize(self):
+        return {
+                'eventid'       : str(self.eventid),
+                'name'          : str(self.name),
+                'description'   : str(self.description),
+                'rating'        : str(self.rating),
+                'lat'           : str(self.lat),
+                'lng'           : str(self.lng),
+                'private'       : str(self.private),
+                'phone'         : str(self.phone),
+                'email'         : str(self.email),
+                'date'          : str(self.date),
+                'category'      : str(self.category)
+                }
 
 
 class Event_attendees(db.Model):
@@ -212,6 +229,7 @@ def add_event():
         date = data['date']
         phone = data['phone']
         email = data['email']
+        category=data['category']
         createdby = user.userid
 
         isDuplicate = Events.query.filter_by(name=eventname).first()
@@ -220,7 +238,7 @@ def add_event():
             res = {'res': 'Event already exists'}
             return('Event already exists',200)
 
-        new_event=Events(eventname,description,createdby,rsoid, date, phone, email, rating=rating)
+        new_event=Events(eventname,description,createdby,rsoid, date, phone, email, category, rating=rating)
 
         if "lat" in data and "lng" in data:
             new_event.lat=data['lat']
@@ -253,6 +271,7 @@ def add_event():
 
 
 @app.route('/getrso', methods=['GET'])
+@login_required
 def get_rso():
 
     data = {}
@@ -266,6 +285,7 @@ def get_rso():
     return (json.dumps(data), 200)
 
 @app.route('/addrso', methods=['POST'])
+@login_required
 def add_rso():
 
     if request.method == 'POST':
@@ -283,6 +303,7 @@ def add_rso():
 
 
 @app.route('/rsouser', methods=['GET','POST'])
+@login_required
 def rso_user():
 
     if request.method == 'GET':
@@ -323,7 +344,24 @@ def rso_user():
     return ('Ron royally messed up', 204)
 
 
+@app.route('/getevents', methods=['GET','POST'])
+def get_events():
+
+    userid=session['logged_in_user']
+
+    user_in_rso = User_in_rso.query.filter_by(userid=userid)
+
+    rsolist = [rso.rsoid for rso in user_in_rso]
+
+    eventlist = []
+
+    for r in rsolist:
+
+        eventrso = Events.query.filter_by(rsoid=r)
+
+        [eventlist.append(e) for e in eventrso]
 
 
+    payload = [x.serialize() for x in eventlist]
 
-
+    return (json.dumps(payload),200)
