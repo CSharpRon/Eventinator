@@ -3,7 +3,11 @@ import { render } from 'react-dom';
 import Modal from 'react-modal';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
- 
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+axios.defaults.crossDomain = true;
+
 export class EventSidePanel extends Component {
     constructor(props) {
         super(props);
@@ -53,12 +57,28 @@ export class EventSidePanel extends Component {
 
     renderRso(){
 
+
         var data = {
             "res":"ok",
             "ASM":1,
             "Bio":2,
             "C#":3,
         }
+
+        const options = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json', 'userid': 1 },
+            url:'http://127.0.0.1:5000/rsouser',
+        };
+
+        axios(options)
+            .then(function (response) {
+                data=response.data
+                })
+            .catch(function (error) {
+                console.log('error: ' + error);
+            });
+
 
         var res = []
 
