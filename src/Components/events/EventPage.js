@@ -2,17 +2,11 @@ import React, {Component} from 'react';
 import {Markers, MyMapComponent} from '../googleMaps/Markers';
 import {EventSidePanel} from './EventSidePanel';
 //import {Button} from 'reactstrap';
-<<<<<<< HEAD
-import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
-import axios from 'axios';
-import { endpoint } from '../../Api/URL_Const';
-=======
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1';
 import axios from 'axios';
 import { endpoint } from '../../Api/URL_Const';
 import {RSOPage} from './RSOPage';
 
->>>>>>> origin/RSOPage
 
 document.body.style = 'background: '+BACKGROUND+';';
 
