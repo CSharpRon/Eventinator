@@ -17,7 +17,9 @@ class EventPage extends Component {
             lng: 0,
             showCreatedEvent: false,
             showCreateContact: false,
-            commentsToBeShown:[]
+            commentsToBeShown:[],
+            data: []
+            
          };
 
         this.getLocation = this.getLocation.bind(this);
@@ -67,11 +69,19 @@ class EventPage extends Component {
         //console.log(this.state.showCreatedEvent);
     }
 
+    addData = (passedData) => {
+        //adding the array of json objects to the data variable
+        for(var i = 0; i<passedData.length; i++)
+        {
+            this.state.data.push(passedData[i]);
+        }
+    }
+
     render() {
 
         const comments = ["Bill:hi", "Bill:where is everyone???","Bill:No one showed up" , "Bill:I'm all alone"];
 
-        const data = [
+        const exampleData = [
             {
                 "name": "presentation",
                 "description": "Jank presentation",
@@ -101,6 +111,8 @@ class EventPage extends Component {
                 "attendees": ["camilo", "stephanie"]
             },
           ];
+
+          this.addData(exampleData);
 
         return (
 
@@ -141,7 +153,7 @@ class EventPage extends Component {
             </thead>
             <tbody>
                 <input type="hidden" value="@item.Id" id="groupId"/>      
-                {data.map(obj =>{
+                {this.state.data.map(obj =>{
                     return (
                     <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}" style={{'background-color': ROWSCOLORS}}> 
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.name}</td>
