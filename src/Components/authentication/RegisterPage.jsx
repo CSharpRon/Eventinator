@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Link, Redirect, withRouter } from 'react-router-dom';
-import AuthenticationApi from '../../Api/Authentication/authenticationApi';
+import Style from './authentication.css';
+import Clicks from './authentication.js';
+import { Link, withRouter, Redirect } from 'react-router-dom';
 import axios from 'axios';
-import {endpoint} from '../../Api/URL_Const';
+import { endpoint } from '../../Api/URL_Const';
+axios.defaults.withCredentials = true;
+axios.defaults.crossDomain = true;
 
 class Register extends Component {
 
@@ -14,7 +17,7 @@ class Register extends Component {
             password2: '',
             email: '',
         }
-        
+
         this.sendRegister = this.sendRegister.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePassword1Change = this.handlePassword1Change.bind(this);
@@ -23,19 +26,19 @@ class Register extends Component {
     }
 
     handleUsernameChange(event) {
-        this.setState({username: event.target.value});
+        this.setState({ username: event.target.value });
     }
 
     handlePassword1Change(event) {
-        this.setState({password1: event.target.value});
+        this.setState({ password1: event.target.value });
     }
 
     handlePassword2Change(event) {
-        this.setState({password2: event.target.value});
+        this.setState({ password2: event.target.value });
     }
 
     handleEmailChange(event) {
-        this.setState({email: event.target.value});
+        this.setState({ email: event.target.value });
     }
 
     sendRegister() {
@@ -51,8 +54,8 @@ class Register extends Component {
 
         const options = {
             method: 'POST',
-            headers: {'content-type': 'application/json',  },
-            data: JSON.stringify({ username, password}),
+            headers: { 'content-type': 'application/json' },
+            data: JSON.stringify({ username, password }),
             url,
         };
 
@@ -60,15 +63,10 @@ class Register extends Component {
             .then(function (response) {
                 console.log(response);
 
-                if(response.res == 'ok') {
-                    test.props.onLoginSuccess(response.userid);
-                    test.props.history.push('/events');
-                    <Redirect to="/" />
-                } else {
-                    alert(response.res);
-                    throw(response);
-                }
-                
+                test.props.onLoginSuccess(response.data.userid);
+                test.props.history.push('/events');
+                <Redirect to="/" />
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -110,7 +108,7 @@ class Register extends Component {
                                             <div className="form-group">
                                                 <div className="row">
                                                     <div className="col-sm-6 col-sm-offset-3">
-                                                        <button name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} style={{'height': '50px'}}>Register Now</button>
+                                                        <button name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} style={{ 'height': '50px' }}>Register Now</button>
                                                     </div>
                                                 </div>
                                             </div>
