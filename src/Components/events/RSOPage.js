@@ -10,7 +10,7 @@ export class RSOPage extends Component {
         this.state = {
             isPaneOpen: true,
             isPaneOpenLeft: false,
-            test:'ayy',
+            returning:'',
             RSOs:["1", "2"]
         }
     }
@@ -36,15 +36,16 @@ export class RSOPage extends Component {
         console.log(this.state.RSOs);
         this.state.RSOs.push(objs);
         console.log(this.state.RSOs);
-
+        this.refs.Rso.value = objs;
         this.forceUpdate();
     }
 
     passRSO()
     {
         this.setState({ isPaneOpen: false });
+        console.log(this.refs.Rso.value);
      //   console.log(this.state.RSOs);
-     this.props.onRSO(this.state.RSOs);   
+     this.props.onRSO(this.state.RSOs, this.refs.selectRso.value);   
     }
  
     render() {
@@ -65,7 +66,8 @@ export class RSOPage extends Component {
                     <div class="modal-body">
                         <form id="add_contact_form" action="{{ url_for('add_contact') }}" method="post">
                             <div class="form-group">
-                            <select>
+                            <label for="Select RSO">Select RSO</label>
+                            <select id = "selectRso"  ref ="selectRso">
                             {this.state.RSOs.map(obj =>{
                                 return (
                                     <option value={obj}>{obj}</option>
