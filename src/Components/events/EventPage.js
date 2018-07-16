@@ -62,44 +62,49 @@ class EventPage extends Component {
         //console.log(this.getCreatedEvent);
     }
 
-    storeEvent(stuff){
+    storeEvent(stuff, ifClose){
         //sets the locaotion of the newly crearted event
-        stuff.event.lat = this.state.latitude;
-        stuff.event.lng = this.state.longitude;
+        if(ifClose)
+        {
+            stuff.event.lat = this.state.latitude;
+            stuff.event.lng = this.state.longitude;
 
-        var name = stuff.event.name;
-        var description = stuff.event.description;
-        var lat = stuff.event.lat;
-        var lng = stuff.event.lng;
-        var isPrivate = stuff.event.private;
-        var rsoid = stuff.event.rsoid;
-        var date = stuff.event.date;
-        var email = stuff.event.email;
-        var phone = stuff.event.phone;
-        var category = stuff.event.category;
-        var rating = stuff.event.rating;
-        var attendees = stuff.event.attendees;
-        var userid = this.props.userid;
-
-        var url = endpoint + '/addevent'
-
-        const options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            data: JSON.stringify({ userid, name, description, lat, lng, isPrivate, rsoid, date, email, phone, category, rating, attendees, userid }),
-            url,
-        };
-
-        axios(options)
-            .then(function (response) {
-
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        this.showSidepanel = false;
-        this.refreshEvents();
+            var name = stuff.event.name;
+            var description = stuff.event.description;
+            var lat = stuff.event.lat;
+            var lng = stuff.event.lng;
+            var isPrivate = stuff.event.private;
+            var rsoid = stuff.event.rsoid;
+            var date = stuff.event.date;
+            var email = stuff.event.email;
+            var phone = stuff.event.phone;
+            var category = stuff.event.category;
+            var rating = stuff.event.rating;
+            var attendees = stuff.event.attendees;
+            var userid = this.props.userid;
+    
+            var url = endpoint + '/addevent'
+    
+            const options = {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                data: JSON.stringify({ userid, name, description, lat, lng, isPrivate, rsoid, date, email, phone, category, rating, attendees, userid }),
+                url,
+            };
+    
+            axios(options)
+                .then(function (response) {
+    
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+    
+            this.showSidepanel = false;
+            this.refreshEvents();
+        }
+        this.setState({showCreatedEvent: false});
+        
     }
     
     storeLocation(passedLocation){
@@ -181,7 +186,7 @@ class EventPage extends Component {
 
     closeSidepanel = () =>{
         //console.log("hi");
-        this.setState({showCreatedEvent: false});
+        this.setState({showCreatedEvent: true});
         //console.log(this.state.showCreatedEvent);
     }
 
@@ -249,7 +254,7 @@ class EventPage extends Component {
             </button>
         </div> */}
            
-           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div>
+           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div> 
 
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
