@@ -381,7 +381,7 @@ def get_events():
     user_in_rso = User_in_rso.query.filter_by(userid=userid)
 
     rsolist = [rso.rsoid for rso in user_in_rso]
-
+    
     eventlist = []
 
     for r in rsolist:
