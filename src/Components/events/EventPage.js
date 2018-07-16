@@ -283,8 +283,6 @@ class EventPage extends Component {
                         <td> 
                         <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.lat+','+obj.lng)}  data-button="{{contact.id}}">Ping to Location</button>
                         &nbsp;
-                        <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
-                        &nbsp;
                         <button type="button" class="btn btn-info btn-sm remove-button" onClick={() => this.openRSO(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">RSO</button>
                         </td>
                     </tr>
