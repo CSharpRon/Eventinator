@@ -67,6 +67,7 @@ export class RSOPage extends Component {
                         <form id="add_contact_form" action="{{ url_for('add_contact') }}" method="post">
                             <div class="form-group">
                             <label for="Select RSO">Select RSO</label>
+                            <br></br>
                             <select id = "selectRso"  ref ="selectRso">
                             {this.state.RSOs.map(obj =>{
                                 return (
@@ -75,10 +76,13 @@ export class RSOPage extends Component {
                                 ); })}
                             </select>
                         </div>
+
                                     <label for="RSO">RSO</label>
                                     <input name="Rso" type="text" class="form-control" id="Rso" ref ="Rso" placeholder="Enter an RSO">
                                     </input>
+                                    <br></br>
                         <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.passRSO(this.props)} >Enroll</button>
+                        &nbsp;
                         <button type="button" class="btn btn-alert" data-dismiss="modal" onClick={()=>this.addRSO(this.refs.Rso.value)}>Add RSO</button>
                     </form>
                 </div>
