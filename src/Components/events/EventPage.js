@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Markers from '../googleMaps/Markers';
 import {CommentsSidePanel} from './CommentsSidePanel';
 //import {Button} from 'reactstrap';
-//import Prompt from 'Prompt'
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
 
@@ -17,23 +16,31 @@ class EventPage extends Component {
             lat: 0,
             lng: 0,
             showComments: false,
+            showCreateContact: false,
             commentsToBeShown:[]
          };
 
         this.getLocation = this.getLocation.bind(this);
-        this.getData = this.closeComments.bind(this);
+        this.getData = this.closeSidepanel.bind(this);
         this.displayingComments = null;
+        this.createdEvent = null;
+    }
+
+    createEvent(showSidepanel){
+        this.state.showCreateContact = true;
+        console.log(showSidepanel);
+        this.setState({showComments: true, commentsToBeShown: showSidepanel});
+        console.log(this.state.showComments);
+        this.createdEvent = <CommentsSidePanel onComments = {this.getData} theComments= {this.props.commentsToBeShown} />
     }
 
     //we can use this function to ping to a location of an event
     getLocation (obj){
         console.log(obj);
         
-        var startOfLongitude = obj.indexOf("lng:")+5, endOfLongitude = obj.length;
-        var startOfLatitude = 5, endOfLatitude = startOfLongitude - 11;
 
         //opens a new google map window to the location of the event.
-        window.open('http://maps.google.com/maps?q='+ obj.substr(startOfLatitude, endOfLatitude) +','+ obj.substr(startOfLongitude, endOfLongitude), '_blank');
+        window.open('http://maps.google.com/maps?q='+ obj, '_blank');
         //<Markers func = {this.child.pingToLocation()}/>
     }
 
@@ -42,9 +49,10 @@ class EventPage extends Component {
         this.setState({showComments: true, commentsToBeShown: comments});
         console.log(this.state.showComments);
         this.displayingComments = <CommentsSidePanel onComments = {this.getData} theComments= {this.props.commentsToBeShown} />
+        console.log(this.getData);
     }
 
-    closeComments = () =>{
+    closeSidepanel = () =>{
         console.log("hi");
         this.setState({showComments: false});
         console.log(this.state.showComments);
@@ -52,51 +60,73 @@ class EventPage extends Component {
 
     render() {
 
+        const comments = ["Bill:hi", "Bill:where is everyone???","Bill:No one showed up" , "Bill:I'm all alone"];
+
         const data = [
             {
                 "name": "presentation",
-                "eventCategory": "school",
-                "descrition": "Jank presentation",
-                "time": "06:00 PM",
-                "date": "07/16/2018",
-                "location": "lat: 28.600720 lng: -81.197718",
-                "phone": "(352) 555-5555",
+                "description": "Jank presentation",
+                "rating": "0",
+                "lat": "28.600720", 
+                "lng": "-81.197718",
+                "private": true,
+                "rsoid": "1",
+                "date": "07/16/2018 06:00",
+                "phone": "911",
                 "email": "someplace@gmail.com",
-                "comments":["Bill:hi", "Bill:where is everyone???","Bill:No one showed up" , "Bill:I'm all alone"]
+                "category": "school",
+                "attendees": ["camilo", "stephanie"]
             },
             {
-                "name": "more Jank",
-                "eventCategory": "school",
-                "descrition": "Jank presentation",
-                "time": "06:00 PM",
-                "date": "07/16/2018",
-                "location": "lat: 28.599900 lng: -81.200325",
-                "phone": "(352) 555-5555",
-                "email": "someplace@gmail.com",
-                "comments":["Phil:hi", "Phil:where is everyone???","Phil:No one showed up" , "Phil:I'm all alone"]
+                "name": "More Jank",
+                "description": "Jank presentation",
+                "rating": "0",
+                "lat": "28.599900", 
+                "lng": "-81.197718",
+                "private": true,
+                "rsoid": "1",
+                "date": "07/16/2018 07:00",
+                "phone": "912",
+                "email": "titties@titties.edu",
+                "category": "strip club",
+                "attendees": ["camilo", "stephanie"]
             },
           ];
 
         return (
 
             
+            
             <div class="table-wrapper">
-            <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}">Create Event</button>
-            <li></li>
-            <div><Markers/> </div>
+                <button type="button" padding="10px" class="btn-lg btn-block btn-info" data-button="{{contact.id}}" onClick={() => this.createEvent()} >Create Event</button>
+                <li></li>
+                <div><Markers/> </div>
              {/* <CommentsSidePanel /> */}
+           
+
+            
+        {/* <div class="modal-header">
+            <h5 class="modal-title">Add New Contact</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div> */}
+           
            <div> {this.state.showComments ? this.displayingComments: null}</div>
+
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
                 <tr style={{'background-color': CATEGORY}}>
                 <th scope="col">Name</th>
-                <th scope="col">Event Category</th>
                 <th scope="col">Description</th>
-                <th scope="col">Time</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
                 <th scope="col">Date</th>
-                <th scope="col">Location</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Email</th>
+                <th scope="col">Category</th>
+                {/* attendees */}
                 <th scope="col"></th>
                 </tr>
             </thead>
@@ -106,15 +136,16 @@ class EventPage extends Component {
                     return (
                     <tr class="my-data" first="{{contact.first_name}}" last="{{contact.last_name}}" data-id="{{contact.id}}" style={{'background-color': ROWSCOLORS}}> 
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.name}</td>
-                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.eventCategory}</td>
-                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.descrition}</td>
-                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.time}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.description}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.rating}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.lat}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.lng}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.date}</td>
-                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.location}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.phone}</td>
                         <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.email}</td>
+                        <td class="contact-info" data-toggle="modal" data-target="#contact_info{{contact.id}}">{obj.category}</td>
                         <td> 
-                        <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.location)}  data-button="{{contact.id}}">Ping to Location</button>
+                        <button type="button" class="btn btn-danger btn-sm remove-button" onClick={() => this.getLocation(obj.lat+','+obj.lng)}  data-button="{{contact.id}}">Ping to Location</button>
                         &nbsp;
                         <button type="button" class="btn btn-success btn-sm remove-button" onClick={() => this.openComments(obj.comments)}  data-button="{{contact.id}}" margin-left = "10px">Comment</button>
                         </td>
