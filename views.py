@@ -2,7 +2,7 @@ import os
 from flask import Flask, url_for, redirect, render_template, request, json, session, flash, jsonify
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 
@@ -10,7 +10,7 @@ now = datetime.datetime.now()
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
@@ -121,22 +121,24 @@ class Event_attendees(db.Model):
         self.eventid=eventid
 
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'logged_in_user' not in session:
-            return ('User not logged in',204)
-        return f(*args, **kwargs)
-    return decorated_function
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if 'logged_in_user' not in session:
+#             return ('User not logged in',204)
+#         return f(*args, **kwargs)
+#     return decorated_function
 
 
 
 
 @app.route('/register',methods=['GET','POST'])
 def register():
+
+    data = request.get_json(force=True)
     
-    username= request.form['username']
-    password= request.form['password']
+    username= data['username']
+    password= data['password']
 
 
     if request.method == 'POST':
@@ -164,10 +166,13 @@ def register():
     return ('Unknown Error, Blame Ronald', 204)
 
 @app.route('/login', methods=['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def login():
+
+    data = request.get_json(force=True)
     
-    username= request.form['username']
-    password= request.form['password']
+    username= data['username']
+    password= data['password']
         
     if request.method == 'POST':
         
@@ -187,13 +192,18 @@ def login():
     return ('Error Login, Blame Ronald',204)
 
 @app.route('/role', methods=['GET', 'POST'])
-@login_required
+
 def role():
 
     if request.method == 'POST':
 
-        newroleid = request.form['role']
-        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        data = request.get_json(force=True)
+        
+        userid = int(data['userid'])
+        #userid = session['logged_in_user']
+
+        newroleid = data['role']
+        user = User.query.filter_by(userid=userid).first()
         ogid = user.roleid
         user.roleid = newroleid
         db.session.commit()
@@ -204,7 +214,10 @@ def role():
     
     if request.method == 'GET':
 
-        user = User.query.filter_by(userid=session['logged_in_user']).first()
+
+        userid=request.headers['userid']
+
+        user = User.query.filter_by(userid=userid).first()
         res = {'res': 'ok', 'currole':roles[user.roleid]}
 
         return (json.dumps(res), 200)
@@ -213,13 +226,18 @@ def role():
 
 
 @app.route('/addevent', methods=['GET','POST'])
-@login_required
+
 def add_event():
 
     if request.method == 'POST':
 
+        data = request.get_json(force=True)
 
-        user = User.query.filter_by(userid=session['logged_in_user']).first()
+        userid = int(data['userid'])
+        #userid = session['logged_in_user']
+
+        user = User.query.filter_by(userid=userid).first()
+
 
         data = request.get_json(force=True)
         eventname = data['name']
@@ -245,7 +263,7 @@ def add_event():
             new_event.lng=data['lng']
         if "private" in data:
             print('here')
-            if data['private'].lower() == 'true': 
+            if str(data['private']).lower() == 'true': 
                 print('here1')
                 new_event.private = True
             
@@ -271,7 +289,7 @@ def add_event():
 
 
 @app.route('/getrso', methods=['GET'])
-@login_required
+
 def get_rso():
 
     data = {}
@@ -285,12 +303,14 @@ def get_rso():
     return (json.dumps(data), 200)
 
 @app.route('/addrso', methods=['POST'])
-@login_required
+
 def add_rso():
 
     if request.method == 'POST':
 
-        name = request.form['rsoname']
+        data = request.get_json(force=True)
+
+        name = data['rsoname']
 
         new_rso = Rso(name)
         db.session.add(new_rso)
@@ -303,14 +323,15 @@ def add_rso():
 
 
 @app.route('/rsouser', methods=['GET','POST'])
-@login_required
+
 def rso_user():
 
     if request.method == 'GET':
         
-        userid = session['logged_in_user']
+       
+        userid1 = request.headers['userid']
 
-        query = User_in_rso.query.filter_by(userid=userid)
+        query = User_in_rso.query.filter_by(userid=userid1)
 
         data = {}
 
@@ -328,16 +349,22 @@ def rso_user():
 
     if request.method == 'POST':
 
-        rso = request.form['rsoid']
+        data = request.get_json(force=True)
 
-        new_userrso = User_in_rso(session['logged_in_user'], rso)
+
+        rso = data['rsoid']
+        userid = int(data['userid'])
+
+        
+
+        new_userrso = User_in_rso(userid, rso)
 
         db.session.add(new_userrso)
         db.session.commit()
 
         rsoq = Rso.query.filter_by(rsoid=rso).first()
 
-        res = {'res':'ok', 'rsoid':rso, 'rso': rsoq.rsoname,'userid': session['logged_in_user']}
+        res = {'res':'ok', 'rsoid':rso, 'rso': rsoq.rsoname,'userid': userid}
 
         return (json.dumps(res),200)
     
@@ -347,7 +374,8 @@ def rso_user():
 @app.route('/getevents', methods=['GET','POST'])
 def get_events():
 
-    userid=session['logged_in_user']
+    userid=request.headers['userid']
+    #userid=session['logged_in_user']
 
     user_in_rso = User_in_rso.query.filter_by(userid=userid)
 
