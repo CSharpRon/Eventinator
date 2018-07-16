@@ -49,12 +49,16 @@ class EventPage extends Component {
         //console.log(this.getCreatedEvent);
     }
 
-    storeEvent(stuff){
+    storeEvent(stuff, ifClose){
         //sets the locaotion of the newly crearted event
-        stuff.event.lat = this.state.latitude;
-        stuff.event.lng = this.state.longitude;
+        if(ifClose)
+        {
+            stuff.event.lat = this.state.latitude;
+            stuff.event.lng = this.state.longitude;
 
-        this.state.data.push(stuff.event);
+            this.state.data.push(stuff.event);
+        }
+        
         this.setState({showCreatedEvent: false});
         
     }
@@ -93,7 +97,7 @@ class EventPage extends Component {
 
     closeSidepanel = () =>{
         //console.log("hi");
-        this.setState({showCreatedEvent: false});
+        this.setState({showCreatedEvent: true});
         //console.log(this.state.showCreatedEvent);
     }
 
@@ -162,7 +166,7 @@ class EventPage extends Component {
             </button>
         </div> */}
            
-           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div>
+           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div> 
 
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">

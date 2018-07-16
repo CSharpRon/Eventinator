@@ -52,7 +52,7 @@ export class EventSidePanel extends Component {
         //return this.state.event;
         this.props.onComments({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0", lat: "1",
         lng: "1",private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
-        category: this.refs.category.value, attendees: this.refs.attendees.value}});
+        category: this.refs.category.value, attendees: this.refs.attendees.value}}, true);
     }
 
     renderRso(){
@@ -111,9 +111,11 @@ export class EventSidePanel extends Component {
                 onRequestClose={ () => {
                     // triggered on "<" on left top click or on outside click
                     this.setState({ isPaneOpen: false });
-                   // this.props.onComments(this.state.event);
 
-                } }>
+                   this.props.onComments(this.state.event, false);
+
+                } }
+                >
                     <div class="modal-body">
   
   <div class="form-group">
@@ -170,10 +172,11 @@ export class EventSidePanel extends Component {
    </div>
  
  <button id="add_contact_submit" type="button" data-dismiss="modal" class="btn btn-primary" onClick={() => this.addEvent(this.props)} >Add Contact</button>
- <button type="button" class="btn btn-alert" data-dismiss="modal">Cancel</button>
+ <button type="button" class="btn btn-alert" data-dismiss="modal" onClick={()=>this.setState({ isPaneOpen: false })}>Cancel</button>
  
 </div>
             </SlidingPane>
+            <button onClick={()=>this.setState({ isPaneOpen: true })}>Test</button>
         </div>;
     }
 }
