@@ -8,12 +8,12 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: props.username,
+            userid: props.userid,
         }
     }
 
     static defaultProps = {
-        username: null
+        userid: null
     }
 
     render() {
@@ -29,7 +29,7 @@ class Header extends Component {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/events">Events</Link></li>
                     </ul>
-                    {!this.props.username ? (
+                    {!this.props.userid ? (
                         <ul className="nav navbar-nav navbar-right">
                             <li><Link to="/login">Login</Link></li>
                             <li><Link to="/register">Register</Link></li>

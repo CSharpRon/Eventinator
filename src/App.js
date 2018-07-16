@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, withRouter, Route, Redirect } from 'react-router-dom';
 import Header from './Components/common/Header';
 import HomePage from './Components/HomePage';
 import Events from './Components/events/EventPage';
@@ -12,25 +12,25 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: null
+            userid: null
         };
     }
 
-    loginSuccess = (usernameVal) => {
-        this.setState({ username: usernameVal });
+    loginSuccess = (useridVal) => {
+        this.setState({ userid: useridVal });
     }
 
-    clearUsername = () => {
-        this.setState({ username: null });
+    clearUserid = () => {
+        this.setState({ userid: null });
     }
 
     render() {
         return (
             <BrowserRouter>
                 <div>
-                    <Route path="/" render={() => <Header username={this.state.username} logout={this.clearUsername} />} />
-                    <Route path="/" exact component={HomePage} username={this.state.username} />
-                    <Route path="/events" exact component={Events} username={this.state.username} />
+                    <Route path="/" render={() => <Header userid={this.state.userid} logout={this.clearUserid} />} />
+                    <Route path="/" exact component={HomePage} userid={this.state.userid} />
+                    <Route path="/events" exact component={Events} userid={this.state.userid} />
                     {/* <Route path="/calendar" component={Calendar} /> */}
                     <Route path="/login" exact render={() => <Login onLoginSuccess={this.loginSuccess} />} />
                     <Route path="/register" exact render={() => <Register onLoginSuccess={this.loginSuccess} />} />

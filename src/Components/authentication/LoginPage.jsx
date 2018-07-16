@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import Style from './authentication.css';
 import Clicks from './authentication.js';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import {endpoint} from '../../Api/URL_Const';
+axios.defaults.withCredentials = true;
+axios.defaults.crossDomain = true;
 
 class LoginPage extends Component {
 
@@ -21,11 +24,15 @@ class LoginPage extends Component {
     sendLogin() {
         var username = this.state.username;
         var password = this.state.password;
-        var url = 'http://95d8750a.ngrok.io/login';
+        var url = endpoint + '/login';
+
+        var test = this;
+
+        console.log(test.props);
 
         const options = {
             method: 'POST',
-            headers: { 'content-type': 'application/json', },
+            headers: { 'content-type': 'application/json'},
             data: JSON.stringify({ username, password }),
             url,
         };
@@ -33,7 +40,8 @@ class LoginPage extends Component {
         axios(options)
             .then(function (response) {
                 console.log(response);
-                this.props.onLoginSuccess(username);
+                test.props.onLoginSuccess(response.data.userid);
+                test.props.history.push('/events');
             })
             .catch(function (error) {
                 console.log(error);
@@ -102,4 +110,4 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

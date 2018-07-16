@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import { render } from 'react-dom';
 import { compose, withProps, lifecycle } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-import {KEY} from "./account"
+import {KEY} from './account.js'
 
 
 

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import AuthenticationApi from '../../Api/Authentication/authenticationApi';
 import axios from 'axios';
+import {endpoint} from '../../Api/URL_Const';
 
 class Register extends Component {
 
@@ -41,7 +42,12 @@ class Register extends Component {
 
         var username = this.state.username;
         var password = this.state.password1;
-        var url = 'http://95d8750a.ngrok.io/register';
+        var url = endpoint + '/register';
+
+        var test = this;
+
+        console.log('username: ' + username);
+        console.log('password: ' + password);
 
         const options = {
             method: 'POST',
@@ -53,7 +59,16 @@ class Register extends Component {
         axios(options)
             .then(function (response) {
                 console.log(response);
-                this.props.onLoginSuccess(username);
+
+                if(response.res == 'ok') {
+                    test.props.onLoginSuccess(response.userid);
+                    test.props.history.push('/events');
+                    <Redirect to="/" />
+                } else {
+                    alert(response.res);
+                    throw(response);
+                }
+                
             })
             .catch(function (error) {
                 console.log(error);
@@ -111,4 +126,4 @@ class Register extends Component {
     }
 }
 
-export default Register;
+export default withRouter(Register);
