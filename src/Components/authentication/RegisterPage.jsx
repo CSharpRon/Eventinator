@@ -3,42 +3,64 @@ import { Link } from 'react-router-dom';
 import AuthenticationApi from '../../Api/Authentication/authenticationApi';
 import axios from 'axios';
 import $ from 'jquery';
+import authenticationApi from '../../Api/Authentication/authenticationApi';
 
 class Register extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password1: '',
+            password2: '',
+            email: '',
+        }
+        
+        this.sendRegister = this.sendRegister.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePassword1Change = this.handlePassword1Change.bind(this);
+        this.handlePassword2Change = this.handlePassword2Change.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+    }
+
+    handleUsernameChange(event) {
+        this.setState({username: event.target.value});
+    }
+
+    handlePassword1Change(event) {
+        this.setState({password1: event.target.value});
+    }
+
+    handlePassword2Change(event) {
+        this.setState({password2: event.target.value});
+    }
+
+    handleEmailChange(event) {
+        this.setState({email: event.target.value});
+    }
+
     sendRegister() {
 
-        var username = 'ron';
-        var password = 'jon';
-
-        var url = 'http://ae97cacd.ngrok.io/register';
+        var username = this.state.username;
+        var password = this.state.password1;
+        var url = 'http://95d8750a.ngrok.io/register';
 
         const options = {
             method: 'POST',
-            headers: {'content-type': 'application/x-www-form-urlencoded',  },
-            data: JSON.stringify({ username, password }),
+            headers: {'content-type': 'application/json',  },
+            data: JSON.stringify({ username, password}),
             url,
         };
 
         axios(options)
             .then(function (response) {
-                window.alert('test pass: ' + response);
+                window.alert('test pass: ' + response.data.res);
                 console.log(response);
             })
             .catch(function (error) {
                 window.alert('test fail: ' + error);
                 console.log(error);
             });
-
-
-        // AuthenticationApi.register(username, password)
-        //     .then((result) => {
-        //         alert('success! ' + result);
-        //     })
-        //     .catch((err) => {
-        //         console.log(JSON.stringify(err));
-        //         alert('Error registering user: ');
-        //     });
     }
 
     render() {
@@ -62,21 +84,21 @@ class Register extends Component {
                                     <div className="col-lg-12">
                                         <div id="register-form" style={{ "display": "block" }}>
                                             <div className="form-group">
-                                                <input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
+                                                <input type="text" value={this.state.username} onChange={this.handleUsernameChange} name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
                                             </div>
                                             <div className="form-group">
-                                                <input type="email" name="email" id="email" tabIndex="1" className="form-control" placeholder="Email Address" />
+                                                <input type="email" value={this.state.email} onChange={this.handleEmailChange} name="email" id="email" tabIndex="1" className="form-control" placeholder="Email Address" />
                                             </div>
                                             <div className="form-group">
-                                                <input type="password" name="password" id="password" tabIndex="2" className="form-control" placeholder="Password" />
+                                                <input type="password" value={this.state.password1} onChange={this.handlePassword1Change} name="password" id="password" tabIndex="2" className="form-control" placeholder="Password" />
                                             </div>
                                             <div className="form-group">
-                                                <input type="password" name="confirm-password" id="confirm-password" tabIndex="2" className="form-control" placeholder="Confirm Password" />
+                                                <input type="password" value={this.state.password2} onChange={this.handlePassword2Change} name="confirm-password" id="confirm-password" tabIndex="2" className="form-control" placeholder="Confirm Password" />
                                             </div>
                                             <div className="form-group">
                                                 <div className="row">
                                                     <div className="col-sm-6 col-sm-offset-3">
-                                                        <button name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} value="Register Now" />
+                                                        <button name="register-submit" id="register-submit" tabIndex="4" className="form-control btn btn-register" onClick={this.sendRegister} style={{'height': '50px'}}>Register Now</button>
                                                     </div>
                                                 </div>
                                             </div>

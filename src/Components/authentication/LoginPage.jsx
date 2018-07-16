@@ -2,12 +2,51 @@ import React, { Component } from 'react';
 import Style from './authentication.css';
 import Clicks from './authentication.js';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class LoginPage extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: ''
+        }
 
-    login(username, password) {
+        this.sendLogin = this.sendLogin.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    }
 
+    sendLogin() {
+        var username = this.state.username;
+        var password = this.state.password;
+        var url = 'http://95d8750a.ngrok.io/login';
+
+        const options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', },
+            data: JSON.stringify({ username, password }),
+            url,
+        };
+
+        axios(options)
+            .then(function (response) {
+                window.alert('Login Successful: ' + response.data.res);
+                console.log(response);
+            })
+            .catch(function (error) {
+                window.alert('Login fail: ' + error);
+                console.log(error);
+            });
+    }
+
+    handleUsernameChange(event) {
+        this.setState({ username: event.target.value });
+    }
+
+    handlePasswordChange(event) {
+        this.setState({ password: event.target.value });
     }
 
     render() {
@@ -28,35 +67,32 @@ class LoginPage extends Component {
                             </div>
                             <div className="panel-body">
                                 <div className="row">
-                                    <div className="col-lg-12">
-                                        <form id="login-form" action="http://localhost:3000/login/process" method="post" role="form" style={{"display": "block"}}>
-                                            <div className="form-group">
-                                                <input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
+                                    <div className="col-lg-12"><div className="form-group">
+                                        <input type="text" value={this.state.username} onChange={this.handleUsernameChange} name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
+                                    </div>
+                                        <div className="form-group">
+                                            <input type="password" value={this.state.password} onChange={this.handlePasswordChange} name="password" id="password" tabIndex="2" className="form-control" placeholder="Password" />
+                                        </div>
+                                        <div className="form-group text-center">
+                                            <input type="checkbox" tabIndex="3" className="" name="remember" id="remember" />
+                                            <label htmlFor="remember"> Remember Me</label>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <div className="col-sm-6 col-sm-offset-3">
+                                                    <button name="login-submit" id="login-submit" onClick={this.sendLogin} tabIndex="4" className="form-control btn btn-login" style={{'height': '50px'}}>Log In</button>
+                                                </div>
                                             </div>
-                                            <div className="form-group">
-                                                <input type="password" name="password" id="password" tabIndex="2" className="form-control" placeholder="Password" />
-                                            </div>
-                                            <div className="form-group text-center">
-                                                <input type="checkbox" tabIndex="3" className="" name="remember" id="remember" />
-                                                <label htmlFor="remember"> Remember Me</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <div className="row">
-                                                    <div className="col-sm-6 col-sm-offset-3">
-                                                        <input type="submit" name="login-submit" id="login-submit" tabIndex="4" className="form-control btn btn-login" value="Log In" />
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="row">
+                                                <div className="col-lg-12">
+                                                    <div className="text-center">
+                                                        <a href="https://localhost:3000/authentication/process" tabIndex="5" className="forgot-password">Forgot Password?</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="text-center">
-                                                            <a href="https://localhost:3000/authentication/process" tabIndex="5" className="forgot-password">Forgot Password?</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
