@@ -5,6 +5,8 @@ import {CommentsSidePanel} from './CommentsSidePanel';
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
 
+const axios = require('axios');
+
 document.body.style = 'background: '+BACKGROUND+';';
 
 
@@ -26,6 +28,19 @@ class EventPage extends Component {
         this.createdEvent = null;
     }
 
+    add_event(stuff){
+
+        axios({
+            method:'post',
+            url:'http://127.0.0.1:5000/addevent',
+            data: stuff,
+        }).then(function (response){
+            console.log(response);
+        });
+        
+
+    }
+
     createEvent(showSidepanel){
         this.state.showCreateContact = true;
         
@@ -38,8 +53,10 @@ class EventPage extends Component {
     }
 
     storeEvent(stuff){
-        console.log(stuff);
+        console.log(stuff['event']);
+        this.add_event(stuff['event']);
         this.setState({showCreatedEvent: false});
+
     }
 
     //we can use this function to ping to a location of an event

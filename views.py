@@ -134,9 +134,11 @@ def login_required(f):
 
 @app.route('/register',methods=['GET','POST'])
 def register():
+
+    data = request.get_json(force=True)
     
-    username= request.form['username']
-    password= request.form['password']
+    username= data['username']
+    password= data['password']
 
 
     if request.method == 'POST':
@@ -165,9 +167,11 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
+    data = request.get_json(force=True)
     
-    username= request.form['username']
-    password= request.form['password']
+    username= data['username']
+    password= data['password']
         
     if request.method == 'POST':
         
@@ -192,7 +196,9 @@ def role():
 
     if request.method == 'POST':
 
-        newroleid = request.form['role']
+        data = request.get_json(force=True)
+
+        newroleid = data['role']
         user = User.query.filter_by(userid=session['logged_in_user']).first()
         ogid = user.roleid
         user.roleid = newroleid
@@ -213,13 +219,16 @@ def role():
 
 
 @app.route('/addevent', methods=['GET','POST'])
-@login_required
+
 def add_event():
 
     if request.method == 'POST':
 
+        print('here')
 
         user = User.query.filter_by(userid=session['logged_in_user']).first()
+
+        print('here1')
 
         data = request.get_json(force=True)
         eventname = data['name']
@@ -290,7 +299,9 @@ def add_rso():
 
     if request.method == 'POST':
 
-        name = request.form['rsoname']
+        data = request.get_json(force=True)
+
+        name = data['rsoname']
 
         new_rso = Rso(name)
         db.session.add(new_rso)

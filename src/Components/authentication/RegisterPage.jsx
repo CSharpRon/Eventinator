@@ -11,7 +11,7 @@ class Register extends Component {
         var username = 'ron';
         var password = 'jon';
 
-        var url = 'http://ae97cacd.ngrok.io/register';
+        var url = 'http://127.0.0.1:5000/register';
 
         const options = {
             method: 'POST',

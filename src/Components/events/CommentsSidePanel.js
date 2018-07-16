@@ -46,9 +46,24 @@ export class CommentsSidePanel extends Component {
         
         this.setState({ isPaneOpen: false });
         //return this.state.event;
-        this.props.onComments({event: {name: this.refs.eventName.value, description: this.refs.description.value, rating: "0",
-        private: true, rsoid: "1", date: this.refs.date.value,phone: this.refs.phone.value, email: this.refs.email.value, 
-        category: this.refs.category.value, attendees: this.refs.attendees.value}});
+        this.props.onComments(
+            {
+                event: 
+                {
+                    name: this.refs.eventName.value, 
+                    description: this.refs.description.value, 
+                    rating: "0",
+                    private: true, 
+                    rsoid: "1", 
+                    date: this.refs.date.value,
+                    phone: this.refs.phone.value, 
+                    email: this.refs.email.value, 
+                    category: this.refs.category.value, 
+                    attendees: this.refs.attendees.value
+                }
+            }
+        );
+
     }
  
     render() {
