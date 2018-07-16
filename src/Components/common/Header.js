@@ -39,9 +39,6 @@ class Header extends Component {
                                 <ul className="nav navbar-nav navbar-right">
                                     <li><Link to="/logout" onClick={this.props.logout} >Logout</Link></li>
                                 </ul>
-                                <ul className="nav navbar-nav navbar-right">
-                                    <li><Link to="/account">My Account</Link></li>
-                                </ul>
                             </div>
                         )}
                 </div>

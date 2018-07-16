@@ -3,7 +3,8 @@ import {Markers, MyMapComponent} from '../googleMaps/Markers';
 import {EventSidePanel} from './EventSidePanel';
 //import {Button} from 'reactstrap';
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
-
+import axios from 'axios';
+import { endpoint } from '../../Api/URL_Const';
 
 document.body.style = 'background: '+BACKGROUND+';';
 
@@ -17,22 +18,28 @@ class EventPage extends Component {
             lng: 0,
             latitude: "",
             longitude: "",
-            showCreatedEvent: false,
+            showCreatedEvent: true,
             showCreateContact: false,
             location: "",
-            commentsToBeShown:[],
+            commentsToBeShown: [],
             data: []
-            
-         };
 
-         this.getCreatedEvent = this.storeEvent.bind(this);
-         this.createdEvent = null;
-        
+        };
+
+        this.refreshEvents = this.refreshEvents.bind(this);
+        this.addData = this.addData.bind(this);
+        this.getCreatedEvent = this.storeEvent.bind(this);
+        this.createdEvent = null;
+
         this.getLatLng = this.storeLocation.bind(this);
         this.getLocation = this.getLocation.bind(this);
         //this.getLatLng = this.storeLatLng;
         this.storedLocation = null;
         this.displayingComments = null;
+    }
+
+    componentDidMount() {
+        this.refreshEvents();
     }
 
     createEvent(showSidepanel){
@@ -43,7 +50,7 @@ class EventPage extends Component {
         this.setState({showCreatedEvent: true, commentsToBeShown: showSidepanel});
         //this.storedLocation = <Markers  getLocation = {this.getLatLng} theComments= {this.props.location} />
         //this.storedLocation = <MyMapComponent isMarkerShown={true} loc = {this.getLatLng} theComments = {this.props.location}/>
-        this.displayingComments = <EventSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
+        this.displayingComments = <EventSidePanel lat={this.state.lat} lng={this.state.lng} onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
         //console.log(this.displayingComments);
         //console.log(this.getCreatedEvent);
         //console.log(this.getCreatedEvent);
@@ -54,9 +61,39 @@ class EventPage extends Component {
         stuff.event.lat = this.state.latitude;
         stuff.event.lng = this.state.longitude;
 
-        this.state.data.push(stuff.event);
-        this.setState({showCreatedEvent: false});
-        
+        var name = stuff.event.name;
+        var description = stuff.event.description;
+        var lat = stuff.event.lat;
+        var lng = stuff.event.lng;
+        var isPrivate = stuff.event.private;
+        var rsoid = stuff.event.rsoid;
+        var date = stuff.event.date;
+        var email = stuff.event.email;
+        var phone = stuff.event.phone;
+        var category = stuff.event.category;
+        var rating = stuff.event.rating;
+        var attendees = stuff.event.attendees;
+        var userid = this.props.userid;
+
+        var url = endpoint + '/addevent'
+
+        const options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            data: JSON.stringify({ userid, name, description, lat, lng, isPrivate, rsoid, date, email, phone, category, rating, attendees, userid }),
+            url,
+        };
+
+        axios(options)
+            .then(function (response) {
+
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        this.showSidepanel = false;
+        this.refreshEvents();
     }
     
     storeLocation(passedLocation){
@@ -80,7 +117,37 @@ class EventPage extends Component {
         //<Markers func = {this.child.pingToLocation()}/>
     }
 
+    refreshEvents() {
+        var url = endpoint + '/getevents'
+        var events = [];
 
+        var userid = this.props.userid;
+
+        const options = {
+            method: 'GET',
+            headers: { 'content-type': 'application/json', 'userid': userid },
+            url,
+        };
+
+        axios(options)
+            .then((response) => {
+                this.setState({data: []});
+                for (var i = 0; i < response.data.length; i++) {
+                    {
+                        console.log('Adding data ' + i);
+                        this.state.data.push(response.data[i]);
+                    }
+                }
+
+                this.state.showCreateContact = true;
+
+                this.setState({showCreatedEvent: true, commentsToBeShown: true});
+        
+                })
+            .catch(function (error) {
+                console.log('error: ' + error);
+            });
+    }
 
     openComments (comments){
         console.log(comments);
@@ -97,7 +164,7 @@ class EventPage extends Component {
         //console.log(this.state.showCreatedEvent);
     }
 
-    addData = (passedData) => {
+    addData(passedData) {
         //adding the array of json objects to the data variable
         for(var i = 0; i<passedData.length; i++)
         {
@@ -106,7 +173,6 @@ class EventPage extends Component {
     }
 
     render() {
-
         const comments = ["Bill:hi", "Bill:where is everyone???","Bill:No one showed up" , "Bill:I'm all alone"];
 
         const exampleData = [

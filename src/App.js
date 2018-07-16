@@ -30,7 +30,7 @@ class App extends React.Component {
                 <div>
                     <Route path="/" render={() => <Header userid={this.state.userid} logout={this.clearUserid} />} />
                     <Route path="/" exact component={HomePage} userid={this.state.userid} />
-                    <Route path="/events" exact component={Events} userid={this.state.userid} />
+                    <Route path="/events" exact render={() => <Events userid={this.state.userid}/>} />
                     {/* <Route path="/calendar" component={Calendar} /> */}
                     <Route path="/login" exact render={() => <Login onLoginSuccess={this.loginSuccess} />} />
                     <Route path="/register" exact render={() => <Register onLoginSuccess={this.loginSuccess} />} />
