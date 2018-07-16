@@ -15,23 +15,31 @@ class EventPage extends Component {
         this.state = {
             lat: 0,
             lng: 0,
-            showComments: false,
+            showCreatedEvent: false,
             showCreateContact: false,
             commentsToBeShown:[]
          };
 
         this.getLocation = this.getLocation.bind(this);
-        this.getData = this.closeSidepanel.bind(this);
+        this.getCreatedEvent = this.storeEvent.bind(this);
         this.displayingComments = null;
         this.createdEvent = null;
     }
 
     createEvent(showSidepanel){
         this.state.showCreateContact = true;
-        console.log(showSidepanel);
-        this.setState({showComments: true, commentsToBeShown: showSidepanel});
-        console.log(this.state.showComments);
-        this.createdEvent = <CommentsSidePanel onComments = {this.getData} theComments= {this.props.commentsToBeShown} />
+        
+        //console.log(showSidepanel);
+        this.setState({showCreatedEvent: true, commentsToBeShown: showSidepanel});
+        this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
+        //console.log(this.displayingComments);
+        //console.log(this.getCreatedEvent);
+        //console.log(this.getCreatedEvent);
+    }
+
+    storeEvent(stuff){
+        console.log(stuff);
+        this.setState({showCreatedEvent: false});
     }
 
     //we can use this function to ping to a location of an event
@@ -46,16 +54,17 @@ class EventPage extends Component {
 
     openComments (comments){
         console.log(comments);
-        this.setState({showComments: true, commentsToBeShown: comments});
-        console.log(this.state.showComments);
-        this.displayingComments = <CommentsSidePanel onComments = {this.getData} theComments= {this.props.commentsToBeShown} />
-        console.log(this.getData);
+        this.setState({showCreatedEvent: true, commentsToBeShown: comments});
+        console.log(this.state.showCreatedEvent);
+        
+        this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
+        console.log(this.getCreatedEvent);
     }
 
     closeSidepanel = () =>{
-        console.log("hi");
-        this.setState({showComments: false});
-        console.log(this.state.showComments);
+        //console.log("hi");
+        this.setState({showCreatedEvent: false});
+        //console.log(this.state.showCreatedEvent);
     }
 
     render() {
@@ -112,7 +121,7 @@ class EventPage extends Component {
             </button>
         </div> */}
            
-           <div> {this.state.showComments ? this.displayingComments: null}</div>
+           <div> {this.state.showCreatedEvent ? this.displayingComments: null}</div>
 
             <table class="table table-dark table-striped table-hover rounded">
             <thead class="rounded">
