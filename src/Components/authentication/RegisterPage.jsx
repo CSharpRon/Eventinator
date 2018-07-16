@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationApi from '../../Api/Authentication/authenticationApi';
 import axios from 'axios';
-import $ from 'jquery';
-import authenticationApi from '../../Api/Authentication/authenticationApi';
 
 class Register extends Component {
 
@@ -54,11 +52,10 @@ class Register extends Component {
 
         axios(options)
             .then(function (response) {
-                window.alert('test pass: ' + response.data.res);
                 console.log(response);
+                this.props.onLoginSuccess(username);
             })
             .catch(function (error) {
-                window.alert('test fail: ' + error);
                 console.log(error);
             });
     }

@@ -8,8 +8,12 @@ class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: null
-        };
+            username: props.username,
+        }
+    }
+
+    static defaultProps = {
+        username: null
     }
 
     render() {
@@ -25,15 +29,20 @@ class Header extends Component {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/events">Events</Link></li>
                     </ul>
-                    {!this.state.username ? (
+                    {!this.props.username ? (
                         <ul className="nav navbar-nav navbar-right">
                             <li><Link to="/login">Login</Link></li>
                             <li><Link to="/register">Register</Link></li>
                         </ul>
                     ) : (
-                            <ul className="nav navbar-nav navbar-right">
-                                <li><Link to="/account">My Account</Link></li>
-                            </ul>
+                            <div>
+                                <ul className="nav navbar-nav navbar-right">
+                                    <li><Link to="/logout" onClick={this.props.logout} >Logout</Link></li>
+                                </ul>
+                                <ul className="nav navbar-nav navbar-right">
+                                    <li><Link to="/account">My Account</Link></li>
+                                </ul>
+                            </div>
                         )}
                 </div>
             </nav>

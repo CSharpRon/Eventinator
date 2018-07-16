@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import Header from './Components/common/Header';
 import HomePage from './Components/HomePage';
 import Events from './Components/events/EventPage';
@@ -7,21 +7,37 @@ import Login from './Components/authentication/LoginPage';
 import Register from './Components/authentication/RegisterPage';
 
 class App extends React.Component {
-  render() {
-      return (
 
-          <BrowserRouter>
-              <div>
-                  <Route path="/" component = {Header}/>
-                  <Route path="/" exact component={HomePage} />
-                  <Route path="/events" exact component={Events} />
-                  <Route path="/login" exact component={Login} />
-                  <Route path="/register" exact component={Register} />
-              </div>
-          </BrowserRouter>
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: null
+        };
+    }
 
-      );
-  }
+    loginSuccess = (usernameVal) => {
+        this.setState({ username: usernameVal });
+    }
+
+    clearUsername = () => {
+        this.setState({ username: null });
+    }
+
+    render() {
+        return (
+            <BrowserRouter>
+                <div>
+                    <Route path="/" render={() => <Header username={this.state.username} logout={this.clearUsername} />} />
+                    <Route path="/" exact component={HomePage} username={this.state.username} />
+                    <Route path="/events" exact component={Events} username={this.state.username} />
+                    <Route path="/login" exact render={() => <Login onLoginSuccess={this.loginSuccess} />} />
+                    <Route path="/register" exact render={() => <Register onLoginSuccess={this.loginSuccess} />} />
+                    <Route path="/logout" render={() => <Redirect to="/"/>} />
+                </div>
+            </BrowserRouter>
+
+        );
+    }
 }
 
 export default App;
