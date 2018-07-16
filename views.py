@@ -236,9 +236,9 @@ def add_event():
         
         if isDuplicate:
             res = {'res': 'Event already exists'}
-            return('Event already exists',200)
+            return('Event already exists',200)  
 
-        new_event=Events(eventname,description,createdby,rsoid, date, phone, email, category, rating=rating)
+        new_event=Events(eventname,description,createdby,rsoid, phone, email, category, date, rating=rating)
 
         if "lat" in data and "lng" in data:
             new_event.lat=data['lat']
