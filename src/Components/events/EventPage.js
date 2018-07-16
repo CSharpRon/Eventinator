@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Markers, MyMapComponent} from '../googleMaps/Markers';
-import {CommentsSidePanel} from './CommentsSidePanel';
+import {EventSidePanel} from './EventSidePanel';
 //import {Button} from 'reactstrap';
 import {BACKGROUND, ROWSCOLORS, CATEGORY} from '../Styles/theme1'
 
@@ -43,7 +43,7 @@ class EventPage extends Component {
         this.setState({showCreatedEvent: true, commentsToBeShown: showSidepanel});
         //this.storedLocation = <Markers  getLocation = {this.getLatLng} theComments= {this.props.location} />
         //this.storedLocation = <MyMapComponent isMarkerShown={true} loc = {this.getLatLng} theComments = {this.props.location}/>
-        this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
+        this.displayingComments = <EventSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
         //console.log(this.displayingComments);
         //console.log(this.getCreatedEvent);
         //console.log(this.getCreatedEvent);
@@ -53,7 +53,7 @@ class EventPage extends Component {
         //sets the locaotion of the newly crearted event
         stuff.event.lat = this.state.latitude;
         stuff.event.lng = this.state.longitude;
-        
+
         this.state.data.push(stuff.event);
         this.setState({showCreatedEvent: false});
         
@@ -87,7 +87,7 @@ class EventPage extends Component {
         this.setState({showCreatedEvent: true, commentsToBeShown: comments});
         console.log(this.state.showCreatedEvent);
         
-        this.displayingComments = <CommentsSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
+        this.displayingComments = <EventSidePanel onComments = {this.getCreatedEvent} theComments= {this.props.commentsToBeShown} />
         console.log(this.getCreatedEvent);
     }
 
@@ -151,7 +151,7 @@ class EventPage extends Component {
                 <li></li>
                 {/* <div><Markers/> </div> */}
                 {<Markers  getLocation = {this.getLatLng} theLocation= {this.props.location} />}
-             {/* <CommentsSidePanel /> */}
+             {/* <EventSidePanel /> */}
            
 
             

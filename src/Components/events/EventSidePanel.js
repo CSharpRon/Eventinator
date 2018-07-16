@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
  
-export class CommentsSidePanel extends Component {
+export class EventSidePanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -124,5 +124,5 @@ export class CommentsSidePanel extends Component {
 }
 
 
-render(<CommentsSidePanel />, document.getElementById('root'));
+render(<EventSidePanel />, document.getElementById('root'));
  
